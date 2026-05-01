@@ -76,11 +76,11 @@ export default function Login() {
     setError,
     clearErrors,
   } = useForm<FormValues>({ defaultValues });
-  const { login, isLoading } = useAuth();
+  const { login } = useAuth();
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await login({ username: data.email, password: data.password });
+      await login(data.email, data.password);
       reset();
     } catch (error: any) {
       setError("root", {
@@ -137,10 +137,7 @@ export default function Login() {
               <button
                 type="submit"
                 className="mt-8 w-full max-w-80 py-2 px-4 bg-primary500 text-white font-suisse rounded-full hover:bg-primary600 disabled:bg-primary300 disabled:cursor-not-allowed"
-                disabled={isLoading}
-              >
-                {isLoading ? "A enviar email..." : "Enviar Email"}
-              </button>
+              />
             </form>
           </>
         ) : (
@@ -187,10 +184,7 @@ export default function Login() {
               <button
                 type="submit"
                 className="mt-8 w-full max-w-80 py-2 px-4 bg-primary500 text-white font-suisse rounded-full hover:bg-primary600 disabled:bg-primary300 disabled:cursor-not-allowed"
-                disabled={isLoading}
-              >
-                {isLoading ? "A iniciar sessão..." : "Iniciar Sessão"}
-              </button>
+              />
             </form>
           </>
         )}
