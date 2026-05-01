@@ -55,7 +55,7 @@ class Match(BaseModel):
     def __str__(self):
         return f"{self.match_type} match created by {self.created_by} on field {self.field}"
 
-class MatchPlayer(models.Model):
+class MatchPlayer(BaseModel):
     class Team(models.TextChoices):
         A = "A", "Team A"
         B = "B", "Team B"
