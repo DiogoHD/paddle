@@ -1,5 +1,5 @@
 import { MatchHeader } from "@/components/headers";
-import { MatchCard } from "@/components/card";
+import { MatchCard } from "@/components/cards";
 
 const group1 = [
   {
@@ -54,9 +54,9 @@ const matches = [
 
 export default function MatchPage() {
   return (
-    <div className="h-screen w-full flex flex-col overflow-hidden">
+    <div className="min-h-screen w-full gap-4 flex flex-col overflow-y-auto no-scrollbar">
       <MatchHeader />
-      <div className="flex flex-col items-center justify-center mt-20">
+      <div className="flex flex-col items-center justify-center">
         {matches.map((match, index) => (
           <MatchCard
             key={index}

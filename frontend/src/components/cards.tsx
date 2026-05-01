@@ -10,7 +10,7 @@ type MatchCardProps = {
 }
 
 
-export function MatchCard({
+function MatchCard({
   time,
   pitch,
   people
@@ -41,3 +41,26 @@ export function MatchCard({
     </div>
   );
 }
+
+function CreateMatchPopUp(trigger: React.ReactNode) {
+  return (
+    
+    <div className="bg-primary-blue rounded-4xl border border-primary-blue shadow-md p-4 mb-4 flex items-center justify-center text-white font-bold text-xl">
+      Criar Partida
+    </div>
+  );
+}
+
+function FilterPopUp() {
+  return (
+    <div className="bg-primary-blue rounded-4xl border border-primary-blue shadow-md p-4 mb-4 flex items-center justify-center text-white font-bold text-xl">
+      Filtrar Partidas
+    </div>
+  );
+}
+
+export {
+  CreateMatchPopUp,
+  FilterPopUp,
+  MatchCard
+};
