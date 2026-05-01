@@ -1,9 +1,13 @@
-export default function HomePage() {
+import { HomeHeader } from "@/components/headers";
 
+export default function HomePage() {
   return (
-    <div>
-      <h1>Welcome to Paddle!</h1>
-      <p>This is the home page.</p>
+    <div className="h-screen w-full flex flex-col overflow-hidden">
+      <HomeHeader />
+      <div className="flex flex-col items-center justify-center mt-20">
+        <p className="text-2xl">Sem partidas agendadas</p>
+      </div>
     </div>
   );
 }
+
