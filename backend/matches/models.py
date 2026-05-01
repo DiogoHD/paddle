@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.utils import timezone
 from django.db import models
 from accounts.models import User
 from core.models import BaseModel
@@ -33,6 +34,8 @@ class Match(BaseModel):
     def clean(self):
         if self.end_time and self.end_time <= self.start_time:
             raise ValidationError("End time must be after start time")
+        if self.start_time < timezone.now():
+            raise ValidationError("Start time cannot be in the past")
 
     def save(self, *args, **kwargs):
         if not self.end_time:
