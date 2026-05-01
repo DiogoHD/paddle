@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { createContext, useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 
@@ -27,7 +27,7 @@ interface AuthContextType {
 // ---------------------------------------------------------------------------
 // Context
 // ---------------------------------------------------------------------------
-const AuthContext = createContext<AuthContextType | null>(null)
+export const AuthContext = createContext<AuthContextType | null>(null)
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
@@ -72,12 +72,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     navigate('/')
   }
 
-  // Refresh automático — corre quando os tokens mudam
   useEffect(() => {
     if (!tokens) return
 
     const decoded = jwtDecode<JwtPayload>(tokens.access)
-    const expiresIn = decoded.exp * 1000 - Date.now() - 60_000 // 1 min antes de expirar
+    const expiresIn = decoded.exp * 1000 - Date.now() - 60_000
 
     if (expiresIn <= 0) {
       logout()
@@ -107,17 +106,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [tokens, logout])
 
   return (
-    <AuthContext.Provider value={{ user, tokens, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        tokens,
+        login,
+        logout,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
-}
-
-// ---------------------------------------------------------------------------
-// Hook
-// ---------------------------------------------------------------------------
-export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth deve ser usado dentro de AuthProvider')
-  return ctx
 }
