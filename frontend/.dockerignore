@@ -1,0 +1,9 @@
+node_modules
+.npm
+.git
+.gitignore
+dist
+build
+.env
+.env.local
+*.log
