@@ -2,7 +2,6 @@ import type { Friend } from "@appTypes/friends"
 import { DeletePopUp } from "@components/popups/AlertPopUps"
 
 export function FriendCard({ friend, onRemove }: { friend: Friend, onRemove: () => void }) {
-  console.log(friend) // Log the friend object to check its structure
   return (
     <div className="flex flex-row w-full justify-between items-center gap-4 bg-white rounded-4xl border border-primary-blue shadow-md p-4">
       <div className="flex flex-row items-center gap-2">
