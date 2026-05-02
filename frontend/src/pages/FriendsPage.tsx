@@ -1,9 +1,10 @@
 import { Header } from "@/components/Header";
 import { ArrowLeft, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useFriends, useRemoveFriend } from "@/services/friendsService";
+import { useFriends, useRemoveFriendship, useRespondFriendshipRequest } from "@/services/friendsService";
 import { FriendCard, FriendRequestCard } from "@/components/FriendCard";
 import { useState } from "react";
+import { EmptyState, LoadingState } from "@components/States";
 
 type FriendsTab = "friends" | "received" | "sent";
 
@@ -17,7 +18,8 @@ export default function FriendsPage() {
   const [activeTab, setActiveTab] = useState<FriendsTab>("friends");
 
   const { data: friends, isLoading, error } = useFriends();
-  const { mutate: removeFriend } = useRemoveFriend();
+  const { mutate: removeFriendship } = useRemoveFriendship();
+  const { mutate: respondFriendshipRequest } = useRespondFriendshipRequest();
 
   const accepted = friends?.filter(f => f.status === "accepted") ?? [];
   const pendingReceived = friends?.filter(f => f.status === "pending" && f.from_user === f.user_public_id) ?? [];
@@ -50,46 +52,50 @@ export default function FriendsPage() {
 
       {/* Content */}
       {activeTab === "friends" && (
-        <>
-          {isLoading && <p className="text-2xl">Carregando amigos...</p>}
+        <div className="flex flex-col items-center justify-start gap-4 p-4 h-full w-full">
+          {isLoading && <LoadingState message="A carregar amigos..." />}
           {error && <p className="text-2xl">Erro ao carregar amigos</p>}
-          {accepted?.length === 0 && <p className="text-2xl">Sem amigos adicionados</p>}
+          {accepted?.length === 0 && <EmptyState message="Sem amigos adicionados" />}
           {accepted?.map(f => (
             <FriendCard
               key={f.public_id}
               name={f.from_user === f.user_public_id ? f.from_user_name : f.to_user_name}
               img_src={f.from_user === f.user_public_id ? f.from_user_img_src : f.to_user_img_src}
-              onRemove={() => removeFriend(f.public_id)}
+              onRemove={() => removeFriendship(f.public_id)}
             />
           ))}
-        </>
+        </div>
       )}
       {activeTab === "received" && (
-        <>
-          {pendingReceived?.length === 0 && <p className="text-2xl">Sem pedidos recebidos</p>}
+        <div className="flex flex-col items-center justify-start gap-4 p-4 h-full w-full">
+          {isLoading && <LoadingState message="A carregar pedidos recebidos..." />}
+          {error && <p className="text-2xl">Erro ao carregar pedidos recebidos</p>}
+          {pendingReceived?.length === 0 && <EmptyState message="Sem pedidos de amizade recebidos" />}
           {pendingReceived?.map(f => (
             <FriendRequestCard
               key={f.public_id}
               name={f.from_user_name}
               img_src={f.from_user_img_src}
-              onAccept={() => removeFriend(f.public_id)}
-              onReject={() => removeFriend(f.public_id)}
+              onAccept={() => respondFriendshipRequest({ requestId: f.public_id, status: "accepted" })}
+              onReject={() => respondFriendshipRequest({ requestId: f.public_id, status: "rejected" })}
             />
           ))}
-        </>
+        </div>
       )}
       {activeTab === "sent" && (
-        <>
-          {pendingSent?.length === 0 && <p className="text-2xl">Sem pedidos enviados</p>}
+        <div className="flex flex-col items-center justify-start gap-4 p-4 h-full w-full">
+          {isLoading && <LoadingState message="A carregar pedidos enviados..." />}
+          {error && <p className="text-2xl">Erro ao carregar pedidos enviados</p>}
+          {pendingSent?.length === 0 && <EmptyState message="Sem pedidos enviados" />}
           {pendingSent?.map(f => (
             <FriendCard
               key={f.public_id}
               name={f.to_user_name}
               img_src={f.to_user_img_src}
-              onRemove={() => removeFriend(f.public_id)}
+              onRemove={() => removeFriendship(f.public_id)}
             />
           ))}
-        </>
+        </div>
       )}
     </div>
   );

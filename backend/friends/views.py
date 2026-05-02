@@ -5,10 +5,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.db import models
 
-from accounts.views import get_user_or_404
-
 from .models import FriendshipRequest
 from .serializers import FriendshipRequestSerializer, FriendshipRequestCreateSerializer, FriendshipRequestUpdateSerializer
+
+def get_friendship_request_or_404(request_uuid):
+    try:
+        return FriendshipRequest.objects.get(public_id=request_uuid)
+    except FriendshipRequest.DoesNotExist:
+        raise NotFound("Pedido de amizade não encontrado")
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -46,19 +50,8 @@ def respond_friendship_request(request: Request, request_uuid: str):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def remove_friend(request: Request, friend_uuid: str):
+def remove_friend(request: Request, friendship_uuid: str):
     """Remover um amigo da lista de amigos do utilizador autenticado"""
-    user = request.user
-    friend = get_user_or_404(public_id=friend_uuid)
-
-    friendship = FriendshipRequest.objects.filter(
-        (models.Q(from_user=user) & models.Q(to_user=friend)) |
-        (models.Q(from_user=friend) & models.Q(to_user=user)),
-        status=FriendshipRequest.Status.ACCEPTED
-    ).first()
-
-    if not friendship:
-        raise NotFound("Amizade não encontrada")
-    
+    friendship = get_friendship_request_or_404(friendship_uuid)
     friendship.delete()
     return Response(status=204)

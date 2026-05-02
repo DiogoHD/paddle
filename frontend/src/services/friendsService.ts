@@ -1,7 +1,7 @@
 import useAuth from "@hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getFriends, removeFriend, sendFriendRequest } from "@api/db/friendsApi";
+import { getFriends, removeFriendship, respondFriendshipRequest, sendFriendRequest } from "@api/db/friendsApi";
 import type { FriendshipRequest } from "@/types/friends";
 
 const StaleTime = 1000 * 60 * 5; // 5 minutes
@@ -19,12 +19,12 @@ export const useFriends = () => {
   });
 }
 
-export const useRemoveFriend = () => {
+export const useRemoveFriendship = () => {
   const { accessToken } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (friendId: string) => removeFriend(accessToken!, friendId),
+    mutationFn: (friendshipId: string) => removeFriendship(accessToken!, friendshipId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friends"] });
     }
@@ -39,6 +39,19 @@ export const useSendFriendRequest = () => {
     mutationFn: (data: { to_user_id: string }) => sendFriendRequest(accessToken!, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
+    }
+  });
+}
+
+export const useRespondFriendshipRequest = () => {
+  const { accessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ requestId, status }: { requestId: string; status: "accepted" | "rejected" }) =>
+      respondFriendshipRequest(accessToken!, requestId, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["friends"] });
     }
   });
 }

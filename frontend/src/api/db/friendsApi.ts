@@ -15,10 +15,10 @@ export const getFriends = async (token: string) => {
   return res.data;
 }
 
-export const removeFriend = async (token: string, friendId: string) => {
+export const removeFriendship = async (token: string, friendshipId: string) => {
   const res = await apiRequest({
     method: "DELETE",
-    path: `friends/remove/${friendId}/`,
+    path: `friends/${friendshipId}/remove/`,
     token
   });
 
@@ -42,6 +42,21 @@ export const sendFriendRequest = async (token: string, data: { to_user_id: strin
 
   if (!res.success || !res.data) {
     throw new Error("Failed to send friend request");
+  }
+
+  return res.data;
+}
+
+export const respondFriendshipRequest = async (token: string, requestId: string, status: "accepted" | "rejected") => {
+  const res = await apiRequest({
+    method: "PUT",
+    path: `friends/requests/${requestId}/respond/`,
+    token,
+    data: { status }
+  });
+
+  if (!res.success) {
+    throw new Error("Failed to respond to friendship request");
   }
 
   return res.data;
