@@ -21,6 +21,8 @@ function MatchCard({
   const startHour = new Date(match.start_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
   const endHour = new Date(match.end_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
 
+  console.log(team1[0]?.user.image)
+
   return (
     <div className="flex flex-col gap-4 w-full bg-white rounded-4xl border border-primary-blue shadow-md p-4" {...props}>
       <div className="flex flex-row items-center justify-between text-xl font-bold">
@@ -30,7 +32,7 @@ function MatchCard({
       <div className="flex flex-row justify-center items-center gap-4">
         {team1.map((person, index) => (
           person ? (
-            <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
+            <div key={person.user.public_id} className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
               {person.user.image ? (
                 <img 
                   src={person.user.image}
@@ -48,7 +50,7 @@ function MatchCard({
         <p className="font-bold text-lg mx-2 text-primary-blue">VS</p>
         {team2.map((person, index) => (
           person ? (
-            <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
+            <div key={person.user.public_id} className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
               {person.user.image ? (
                 <img 
                   src={person.user.image}

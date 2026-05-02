@@ -1,3 +1,5 @@
+import os
+
 from rest_framework import serializers
 from .models import User
 from datetime import date
@@ -42,12 +44,11 @@ class PublicUserSerializer(serializers.ModelSerializer):
         return today.year - obj.birthday.year - (
             (today.month, today.day) < (obj.birthday.month, obj.birthday.day)
         )
-    
+
     def get_image(self, obj):
         if obj.image:
-            request = self.context.get('request')
-            if request is not None:
-                return request.build_absolute_uri(obj.image.url)
+            backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+            return f"{backend_url}{obj.image.url}"
         return None
 
 class RegisterSerializer(serializers.ModelSerializer):
