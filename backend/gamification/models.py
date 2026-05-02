@@ -10,7 +10,7 @@ class Achievement(BaseModel):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     description = models.TextField()
-    imgSrc = models.URLField(blank=True, null=True)
+    img_src = models.URLField(blank=True, null=True)
     
     requirement_type = models.CharField(max_length=50, choices=RequirementType.choices)  # e.g., 'friend_count', 'match_wins'
     requirement_value = models.IntegerField()  # e.g., 10 for 10 friends

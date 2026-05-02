@@ -19,6 +19,7 @@ interface AuthTokens {
 interface AuthContextType {
   user: JwtPayload | null
   tokens: AuthTokens | null
+  accessToken: string | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
@@ -110,6 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         tokens,
+        accessToken: tokens?.access ?? null,
         login,
         logout,
         isAuthenticated: !!user,
