@@ -9,16 +9,18 @@ export default function MatchHistoryPage() {
   const { data: matchHistory, isLoading, error } = useUserMatchHistory();
 
     return (
-        <div className="h-full w-full gap-4 flex flex-col">
+        <div className="h-full w-full gap-4 flex flex-col overflow-hidden no-scrollbar">
             <Header 
                 text="Histórico de Partidas" 
                 leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>} 
             />
-            <div className="flex flex-col items-center justify-center gap-4 p-4 h-full w-full">
+            <div className="flex flex-col items-center gap-4 p-4 h-full w-full overflow-y-auto">
                 {isLoading && <LoadingState message="Carregando histórico..." />}
                 {error && <ErrorState message="Erro ao carregar histórico" />}
                 {matchHistory && matchHistory.length === 0 && (
-                    <EmptyState message="Sem histórico de partidas" />
+                    <div className="flex flex-1 items-center justify-center h-full">
+                        <EmptyState message="Sem partidas disponíveis" />
+                    </div>
                 )}
                 {matchHistory?.map((match, index) => (
                     <MatchDetailsPopUp
