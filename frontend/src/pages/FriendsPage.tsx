@@ -55,7 +55,7 @@ export default function FriendsPage() {
         <div className="flex flex-col items-center justify-start gap-4 p-4 h-full w-full">
           {isLoading && <LoadingState message="A carregar amigos..." />}
           {error && <p className="text-2xl">Erro ao carregar amigos</p>}
-          {accepted?.length === 0 && <EmptyState message="Sem amigos adicionados" />}
+          {!isLoading && accepted?.length === 0 && <EmptyState message="Sem amigos adicionados" />}
           {accepted?.map(f => (
             <FriendCard
               key={f.public_id}
@@ -70,7 +70,7 @@ export default function FriendsPage() {
         <div className="flex flex-col items-center justify-start gap-4 p-4 h-full w-full">
           {isLoading && <LoadingState message="A carregar pedidos recebidos..." />}
           {error && <p className="text-2xl">Erro ao carregar pedidos recebidos</p>}
-          {pendingReceived?.length === 0 && <EmptyState message="Sem pedidos de amizade recebidos" />}
+          {!isLoading && pendingReceived?.length === 0 && <EmptyState message="Sem pedidos de amizade recebidos" />}
           {pendingReceived?.map(f => (
             <FriendRequestCard
               key={f.public_id}
@@ -86,7 +86,7 @@ export default function FriendsPage() {
         <div className="flex flex-col items-center justify-start gap-4 p-4 h-full w-full">
           {isLoading && <LoadingState message="A carregar pedidos enviados..." />}
           {error && <p className="text-2xl">Erro ao carregar pedidos enviados</p>}
-          {pendingSent?.length === 0 && <EmptyState message="Sem pedidos enviados" />}
+          {!isLoading && pendingSent?.length === 0 && <EmptyState message="Sem pedidos enviados" />}
           {pendingSent?.map(f => (
             <FriendCard
               key={f.public_id}
