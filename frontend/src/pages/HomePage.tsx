@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { FiltersPopUp } from "@/components/Popups";
-import { EmptyState, LoadingState } from "@/components/States";
+import { EmptyState, LoadingState, ErrorState } from "@/components/States";
 import { useUserMatches } from "@services/matchesService";
 import { MatchDetailsPopUp } from "@/components/Popups";
 
@@ -12,7 +12,7 @@ export default function HomePage() {
       <Header text="As Minhas Partidas" rightNode={<FiltersPopUp />} />
       <div className="flex flex-col items-center justify-center align-middle p-4 gap-4 h-full w-full">
         {isLoading && <LoadingState message="Carregando partidas..." />}
-        {error && <p className="text-2xl">Erro ao carregar partidas</p>}
+        {error && <ErrorState message="Erro ao carregar partidas" />}
         {matches && matches.length === 0 && (
           <EmptyState message="Sem partidas agendadas" />
         )}

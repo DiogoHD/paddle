@@ -15,6 +15,7 @@ class Command(BaseCommand):
                     'description': ach['description'],
                     'requirement_type': ach['requirement_type'],
                     'requirement_value': ach['requirement_value'],
+                    'img_src': ach['img_src'],
                 }
             )
         

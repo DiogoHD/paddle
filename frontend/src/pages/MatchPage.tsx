@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { CreateMatchPopUp, FiltersPopUp, MatchDetailsPopUp } from "@/components/Popups";
-import { EmptyState, LoadingState } from "@/components/States";
+import { EmptyState, LoadingState, ErrorState } from "@/components/States";
 import { useMatches } from "@services/matchesService";
 
 export default function MatchPage() {
@@ -11,7 +11,7 @@ export default function MatchPage() {
       <Header text="Procurar Partida" leftNode={<CreateMatchPopUp />} rightNode={<FiltersPopUp />} />
       <div className="flex flex-col items-center justify-center gap-4 p-4 h-full w-full">
         {isLoading && <LoadingState message="Carregando partidas..." />}
-        {error && <p className="text-2xl">Erro ao carregar partidas</p>}
+        {error && <ErrorState message="Erro ao carregar partidas" />}
         {matches && matches.length === 0 && (
           <EmptyState message="Sem partidas disponíveis" />
         )}
