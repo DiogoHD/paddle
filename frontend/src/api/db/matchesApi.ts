@@ -1,5 +1,5 @@
 import { apiRequest } from "@api/helpers/api";
-import type { Match, MatchPlayer } from "@appTypes/match";
+import type { Match, MatchPlayer } from "@appTypes/matches";
 
 export const getMatches = async (token: string): Promise<Match[]> => {
   const res = await apiRequest<Match[]>({

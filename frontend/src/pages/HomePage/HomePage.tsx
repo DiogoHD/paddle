@@ -1,17 +1,27 @@
 import { Header } from "@/components/headers";
 import { FiltersPopUp } from "@/components/popups";
-import sad_raquete from "@/assets/sad-raquete.png";
+import { EmptyState, LoadingState } from "@/components/States";
+import { useUserMatches } from "@services/matchesService";
+import { MatchDetailsPopUp } from "@/components/popups";
 
 export default function HomePage() {
+  const { data: matches, isLoading, error } = useUserMatches();
 
   return (
     <div className="h-full w-full flex flex-col">
       <Header text="As Minhas Partidas" rightNode={<FiltersPopUp />} />
-      <div className="flex flex-col items-center justify-center align-middle gap-4 h-full w-full">
-
-        <img src={sad_raquete} alt="Sad Raquete" className="size-56"/>
-        <p className="text-2xl">Sem partidas agendadas</p>
-
+      <div className="flex flex-col items-center justify-center align-middle p-6 gap-4 h-full w-full">
+        {isLoading && <LoadingState message="Carregando partidas..." />}
+        {error && <p className="text-2xl">Erro ao carregar partidas</p>}
+        {matches && matches.length === 0 && (
+          <EmptyState message="Sem partidas agendadas" />
+        )}
+        {matches?.map((match, index) => (
+          <MatchDetailsPopUp
+            match={match}
+            key={index}
+          />
+        ))}
       </div>
     </div>
   );
