@@ -22,3 +22,10 @@ export interface Match {
 
   players: MatchPlayer[];
 }
+
+export interface CreateMatchPayload {
+  match_type: "SINGLE" | "TEAM";
+  start_time: string;
+  end_time?: string;
+  is_private: boolean;
+}
