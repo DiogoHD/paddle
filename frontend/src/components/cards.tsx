@@ -1,5 +1,5 @@
 import { PlusCircle, Globe, Lock } from "lucide-react"
-import type { Match } from "@appTypes/match";
+import type { Match } from "@/types/matches";
 
 export type usr = {
   name: string,
