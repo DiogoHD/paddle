@@ -3,6 +3,7 @@ from django.apps import AppConfig
 
 class GamificationConfig(AppConfig):
     name = 'gamification'
+    label = 'gamification'
     
     def ready(self):
         # Import signal handlers to ensure they are registered
