@@ -7,8 +7,8 @@ import {
   FileUser,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Header } from "@/components/headers";
-import { LogoutPopUp } from "@/components/popups/AlertPopUps";
+import { Header } from "@/components/Headers";
+import useAuth from "@/hooks/useAuth";
 
 function BodyEntry({
   icon,
