@@ -97,7 +97,7 @@ export default function LoginPage() {
            <img src={app_logo} alt="Logo" className="w-32 h-32 object-contain"/>
         </div>
       </div>
-      <p className="text-2xl text-white font-medium">Paddle UC</p>
+      <p className="text-2xl text-white font-medium">Padle UC</p>
     </div>
 
     <div className="flex-1 bg-white -mt-10 rounded-t-[45px] px-8 pt-8 shadow-2xl">

@@ -1,66 +1,77 @@
+import { PlusCircle, Globe, Lock } from "lucide-react"
+
 type usr = {
   name: string,
   avatarUrl: string
 }
 
 type MatchCardProps = {
-  time: string,
+  date: string,
+  start: string,
+  end: string,
   pitch: number,
-  people: usr[]
+  visibility: string,
+  people: (usr|null)[]
 }
 
 
 function MatchCard({
-  time,
-  pitch,
-  people
-}: MatchCardProps) {
+  match
+}: {
+  match: MatchCardProps
+}) {
+  const midIndex = Math.ceil(match.people.length / 2);
+  const team1 = match.people.slice(0, midIndex);
+  const team2 = match.people.slice(midIndex);
+
+  const dateString = new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
+
   return (
-    <div className="bg-white rounded-4xl border border-primary-blue shadow-md p-4 mb-4">
-      <p className="text-xl font-bold mb-2">{time}</p>
-      <div className="flex flex-row items-center mb-2">
-        {people.map((person, index) => (
-          <img
-            key={index}
-            src={person.avatarUrl}
-            alt={person.name}
-            className="w-10 h-10 rounded-full mr-2"
-          />
-        ))}
-        <p className="font-bold text-lg mx-2 text-black">VS</p>
-        {people.map((person, index) => (
-          <img
-            key={index}
-            src={person.avatarUrl}
-            alt={person.name}
-            className="w-10 h-10 rounded-full mr-2"
-          />
-        ))}
+    <div className="flex flex-col gap-4 max-w-md bg-white rounded-4xl border border-primary-blue shadow-md p-4">
+      <div className="flex flex-row items-center justify-between text-xl font-bold">
+        <p className="font-bold text-md">Campo {match.pitch}</p>
+        <p className="font-bold">{match.start} - {match.end}</p>
       </div>
-      <p className="font-bold text-md">Campo {pitch}</p>
+      <div className="flex flex-row items-center gap-4">
+        {team1.map((person, index) => (
+          person ? (
+            <img
+              key={index}
+              src={person.avatarUrl}
+              alt={person.name}
+              className="size-10 rounded-full"
+            />
+          ) : (
+            <PlusCircle className="size-10" />
+          )
+        ))}
+        <p className="font-bold text-lg mx-2 text-primary-blue">VS</p>
+        {team2.map((person, index) => (
+          person ? (
+            <img
+              key={index}
+              src={person.avatarUrl}
+              alt={person.name}
+              className="size-10 rounded-full"
+            />
+          ) : (
+            <PlusCircle className="size-10" />
+          )
+        ))}
+      </div>      
+      <div className="flex flex-row items-center justify-between text-xl font-bold">
+        <p className="text-lg">{dateString.charAt(0).toUpperCase() + dateString.slice(1)}</p>
+        {match.visibility === "public" ? (
+          <Globe className="size-6 text-green-500" />
+        ) : (
+          <Lock className="size-6 text-red-500" />
+        )}
+      </div>
     </div>
   );
 }
 
-function CreateMatchPopUp(trigger: React.ReactNode) {
-  return (
-    
-    <div className="bg-primary-blue rounded-4xl border border-primary-blue shadow-md p-4 mb-4 flex items-center justify-center text-white font-bold text-xl">
-      Criar Partida
-    </div>
-  );
-}
-
-function FilterPopUp() {
-  return (
-    <div className="bg-primary-blue rounded-4xl border border-primary-blue shadow-md p-4 mb-4 flex items-center justify-center text-white font-bold text-xl">
-      Filtrar Partidas
-    </div>
-  );
-}
 
 export {
-  CreateMatchPopUp,
-  FilterPopUp,
   MatchCard
 };
