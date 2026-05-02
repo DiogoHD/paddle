@@ -1,16 +1,16 @@
 import { Route, Routes, Navigate } from "react-router";
-import HomePage from "@pages/HomePage/HomePage";
-import ProfilePage from "@pages/ProfilePage/ProfilePage";
-import MatchPage from "@pages/MatchPage/MatchPage";
-import { NavBar } from "@components/navbar";
+import HomePage from "@/pages/HomePage";
+import ProfilePage from "@/pages/ProfilePage";
+import MatchPage from "@/pages/MatchPage";
+import { NavBar } from "@/components/Navbar";
 import LoginPage from "@pages/LoginPage/LoginPage";
-import SignUpPage from "@pages/SignUpPage/SignUpPage";
+import SignUpPage from "@/pages/SignUpPage";
 import RequireAuth from "@auth/guards/RequireAuth";
-import AchievementsPage from "@pages/AchievementsPage/AchievementsPage";
-import FriendsPage from "@pages/FriendsPage/FriendsPage";
-import PersonalDataPage from "@pages/PersonalDataPage/PersonalDataPage";
-import SettingsPage from "@pages/SettingsPage/SettingsPage";
-import MatchHistoryPage from "@pages/MatchHistoryPage/MatchHistoryPage";
+import AchievementsPage from "@/pages/AchievementsPage";
+import FriendsPage from "@/pages/FriendsPage";
+import PersonalDataPage from "@/pages/PersonalDataPage";
+import SettingsPage from "@/pages/SettingsPage";
+import MatchHistoryPage from "@/pages/MatchHistoryPage";
 
 const App = () => {
   return (
