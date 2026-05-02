@@ -1,8 +1,8 @@
 import { apiRequest } from "@api/helpers/api";
-import type { Friend, FriendRequest } from "@appTypes/friends";
+import type { FriendshipRequest } from "@appTypes/friends";
 
 export const getFriends = async (token: string) => {
-  const res = await apiRequest<Friend[]>({
+  const res = await apiRequest<FriendshipRequest[]>({
     method: "GET",
     path: "friends/",
     token
@@ -30,7 +30,7 @@ export const removeFriend = async (token: string, friendId: string) => {
 }
 
 
-export const sendFriendRequest = async (token: string, data: { to_user_id: string }): Promise<FriendRequest> => {
+export const sendFriendRequest = async (token: string, data: { to_user_id: string }): Promise<FriendshipRequest> => {
   const res = await apiRequest({
     method: "POST",
     path: `friends/requests/send/`,

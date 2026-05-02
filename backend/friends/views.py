@@ -5,7 +5,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.db import models
 
-from accounts.serializers import PublicUserSerializer
 from accounts.views import get_user_or_404
 
 from .models import FriendshipRequest
@@ -13,11 +12,13 @@ from .serializers import FriendshipRequestSerializer, FriendshipRequestCreateSer
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def list_friendship_requests(request: Request):
-    """Lista de pedidos de amizade pendentes para o utilizador autenticado"""
+def list_friendships(request: Request):
     user = request.user
-    requests = FriendshipRequest.objects.filter(to_user=user, status=FriendshipRequest.Status.PENDING)
-    serializer = FriendshipRequestSerializer(requests, many=True)
+    friendships = FriendshipRequest.objects.filter(
+        (models.Q(from_user=user) | models.Q(to_user=user)) &
+        ~models.Q(status=FriendshipRequest.Status.REJECTED)  # Excluir pedidos recusados
+    )
+    serializer = FriendshipRequestSerializer(friendships, many=True, context={'request': request})
     return Response(serializer.data)
 
 @api_view(['POST'])
@@ -42,19 +43,6 @@ def respond_friendship_request(request: Request, request_uuid: str):
     serializer.is_valid(raise_exception=True)
     updated_request = serializer.save()
     return Response(FriendshipRequestSerializer(updated_request).data)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def list_friends(request: Request):
-    """Lista de amigos do utilizador autenticado"""
-    user = request.user
-    friendships = FriendshipRequest.objects.filter(
-        (models.Q(from_user=user) | models.Q(to_user=user)) &
-        models.Q(status=FriendshipRequest.Status.ACCEPTED)
-    )
-    friends = [f.to_user if f.from_user == user else f.from_user for f in friendships]
-    serializer = PublicUserSerializer(friends, many=True)
-    return Response(serializer.data)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
