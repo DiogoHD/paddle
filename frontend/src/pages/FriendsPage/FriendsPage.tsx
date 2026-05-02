@@ -1,5 +1,5 @@
 import { Header } from "@components/headers";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFriends, useRemoveFriend } from "@/services/friends";
 import { FriendCard } from "@components/friend";
@@ -13,7 +13,8 @@ export default function FriendsPage() {
         <div className="h-full w-full gap-4 flex flex-col overflow-hidden">
             <Header 
                 text="Amigos" 
-                leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>} 
+                leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>}
+                rightNode={<Plus className="size-8 text-white" />}
             />
             <div className="flex flex-col gap-4 p-4 overflow-y-auto">
                 {isLoading && <p className="text-2xl">Carregando amigos...</p>}
