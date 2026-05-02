@@ -1,15 +1,17 @@
 
 from rest_framework import serializers
+
+from accounts.serializers import PublicUserSerializer
 from .models import Match, MatchPlayer
 
 
 class MatchPlayerSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source='user.name', read_only=True)
+    user = PublicUserSerializer(read_only=True)
 
     class Meta:
         model = MatchPlayer
-        fields = ['public_id', 'user', 'user_name', 'team']
-        read_only_fields = ['public_id', 'user', 'user_name']
+        fields = ['public_id', 'user', 'team']
+        read_only_fields = ['public_id', 'user']
 
 class MatchSerializer(serializers.ModelSerializer):
     created_by_name = serializers.CharField(source='created_by.name', read_only=True)
