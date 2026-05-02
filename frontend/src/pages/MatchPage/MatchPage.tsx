@@ -1,5 +1,6 @@
 import { Header } from "@/components/headers";
-import { CreateMatchPopUp, FiltersPopUp, MatchDetailsPopUp } from "@/components/popups";
+import { CreateMatchPopUp, FiltersPopUp } from "@/components/popups/popups";
+import MatchDetailsPopUp from "@/components/popups/MatchDetailsPopUp";
 import type { Match } from "@/types/match";
 
 const matches: Match[] = [

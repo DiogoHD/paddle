@@ -1,5 +1,5 @@
 import { Header } from "@/components/headers";
-import { FiltersPopUp } from "@/components/popups";
+import { FiltersPopUp } from "@/components/popups/popups";
 import sad_raquete from "@/assets/sad-raquete.png";
 
 export default function HomePage() {
