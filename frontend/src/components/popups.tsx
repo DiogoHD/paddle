@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
 import { MatchCard } from '@components/cards';
-import { type MatchCardProps, type usr } from '@components/cards';
+import type { Match, MatchPlayer } from '@appTypes/match';
 interface PopUpProps {
   isOpen: boolean;
   onClose: () => void;
@@ -218,7 +218,7 @@ function ListPlayers({
   access,
   team
 }: {
-  team: (usr|null)[],
+  team: (MatchPlayer|null)[],
   access: "public" | "private"
 }) {
   return (
@@ -228,18 +228,18 @@ function ListPlayers({
           {player ? (
             <div className='flex flex-row justify-between items-center gap-3'>
               <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
-                {player.avatarUrl ? (
+                {player.img_src ? (
                   <img 
-                    src={player.avatarUrl}
-                    alt={player.name}
+                    src={player.img_src}
+                    alt={player.user_name}
                     className="w-full h-full rounded-full object-cover"
                   />
                 ) : (
-                  player.name.charAt(0).toUpperCase()
+                  player.user_name.charAt(0).toUpperCase()
                 )}
               </div>
               <span className="text-md font-medium text-gray-700">
-                {player.name}
+                {player.user_name}
               </span>
             </div>
           ) : (
@@ -259,17 +259,19 @@ function ListPlayers({
 function MatchDetailsPopUp({
   match
 }: {
-  match: MatchCardProps
+  match: Match
 }) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const midIndex = Math.ceil(match.people.length / 2);
-  const team1 = match.people.slice(0, midIndex);
-  const team2 = match.people.slice(midIndex);
-  
-  const date = new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
+  const midIndex = Math.ceil(match.players.length / 2);
+  const team1 = match.players.slice(0, midIndex);
+  const team2 = match.players.slice(midIndex);
+
+  const date = new Date(match.start_time).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
   const dateString = date.charAt(0).toUpperCase() + date.slice(1);
+  const startHour = new Date(match.start_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
+  const endHour = new Date(match.end_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
 
   return (
     <>
@@ -290,12 +292,12 @@ function MatchDetailsPopUp({
           {/* Main Info Grid */}
           <div className="grid grid-cols-2 gap-4">
             {/* Court */}
-            <PopUpEntry1 label="Campo" title={`Campo ${match.pitch}`}>
+            <PopUpEntry1 label="Campo" title={`Campo ${match.field}`}>
               <MapPin className="text-primary-blue" size={20} />
             </PopUpEntry1>
 
             {/* Visibility */}
-            <PopUpEntry1 label="Acesso" title={match.visibility === "public" ? "Pública" : "Privada"}>
+            <PopUpEntry1 label="Acesso" title={match.is_private ? "Privada" : "Pública"}>
               <DoorOpen className="text-primary-blue" size={20} />
             </PopUpEntry1>
           </div>
@@ -308,7 +310,7 @@ function MatchDetailsPopUp({
             </div>
             <div className="flex items-center gap-3 border-l border-white/20 pl-4">
               <Clock size={20} className="text-blue-400" />
-              <span className="text-sm font-medium">{match.start} - {match.end}</span>
+              <span className="text-sm font-medium">{startHour} - {endHour}</span>
             </div>
           </div>
 
@@ -319,11 +321,11 @@ function MatchDetailsPopUp({
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
-            <ListPlayers team={team1} access={match.visibility} />
+            <ListPlayers team={team1} access={match.is_private ? "private" : "public"} />
             
             <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
             
-            <ListPlayers team={team2} access={match.visibility} />
+            <ListPlayers team={team2} access={match.is_private ? "private" : "public"} />
           </div>
 
           {/* Action Button */}
@@ -338,6 +340,7 @@ function MatchDetailsPopUp({
     </>
   );
 }
+
 export {
   PopUp,
   CreateMatchPopUp,

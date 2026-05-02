@@ -1,106 +1,25 @@
 import { Header } from "@/components/headers";
-import { CreateMatchPopUp, FiltersPopUp } from "@/components/popups";
-import { MatchDetailsPopUp } from "@/components/popups";
+import { CreateMatchPopUp, FiltersPopUp, MatchDetailsPopUp } from "@/components/popups";
+import type { Match } from "@/types/match";
 
-const group1 = [
+const matches: Match[] = [
   {
-    name: "João",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
+    public_id: "1",
+    created_by: "1",
+    created_by_name: "João",
+    match_type: "TEAM",
+    field: "1",
+    start_time: "2024-06-01T18:00:00",
+    end_time: "2024-06-01T19:00:00",
+    is_private: false,
+    players: [
+      { public_id: "1", img_src: "https://randomuser.me/api/portraits/men/1.jpg", user: "1", user_name: "João", team: "A" },
+      { public_id: "2", img_src: "https://randomuser.me/api/portraits/women/1.jpg", user: "2", user_name: "Maria", team: "A" },
+      { public_id: "3", img_src: "https://randomuser.me/api/portraits/men/2.jpg", user: "3", user_name: "Joana", team: "B" },
+      { public_id: "4", img_src: "https://randomuser.me/api/portraits/men/3.jpg", user: "4", user_name: "Carlos", team: "B" },
+    ]
   },
-    {
-    name: "Maria",
-    avatarUrl: "https://randomuser.me/api/portraits/women/1.jpg"
-  },
-  {
-    name: "Joana",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-  {
-    name: "Carlos",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-]
-
-const group2 = [
-  {
-    name: "João",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-  null,
-  null,
-  {
-    name: "Carlos",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-]
-
-const group3 = [
-  {
-    name: "Mario",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-  null,
-]
-
-const group4 = [
-  {
-    name: "Carlos",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-  null,
-]
-
-const group5 = [
-  {
-    name: "Serra",
-    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-  null,
-  null,
-  null
-]
-
-const matches = [
-  {
-    date: "2024-06-01",
-    start: "18:00",
-    end: "19:00",
-    visibility: "public",
-    pitch: 1,
-    people: group1
-  },
-  {
-    date: "2024-06-01",
-    start: "19:00",
-    end: "20:00",
-    visibility: "private",
-    pitch: 2,
-    people: group2
-  },
-  {
-    date: "2026-02-03",
-    start: "09:00",
-    end: "10:00",
-    visibility: "public",
-    pitch: 3,
-    people: group3
-  },
-  {
-    date: "2025-02-02",
-    start: "10:00",
-    end: "12:00",
-    visibility: "private",
-    pitch: 2,
-    people: group4
-  },
-  {
-    date: "2024-11-15",
-    start: "12:00",
-    end: "14:00",
-    visibility: "private",
-    pitch: 4,
-    people: group5
-  }
+  // ...
 ]
 
 export default function MatchPage() {
