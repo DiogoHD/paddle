@@ -4,14 +4,16 @@
         "slug": "first-friend",
         "description": "Adiciona o teu primeiro amigo",
         "requirement_type": "friend_count",
-        "requirement_value": 1
+        "requirement_value": 1,
+        "img_src": "/achievements/first-friend.png"
     },
     {
         "name": "Dá Cá Mais Cinco",
         "slug": "five-friends",
         "description": "Adiciona 5 amigos",
         "requirement_type": "friend_count",
-        "requirement_value": 5
+        "requirement_value": 5,
+        "img_src": "/achievements/five-friends.png"
     },
     {
         "name": "Sociallite",
@@ -19,35 +21,39 @@
         "description": "Adiciona 10 amigos",
         "points": 50,
         "requirement_type": "friend_count",
-        "requirement_value": 10
-
+        "requirement_value": 10,
+        "img_src": "/achievements/sociallite.png"
     },
     {
         "name": "Parabéns a Você",
         "slug": "veteran-player",
         "description": "Joga há mais de um ano",
         "requirement_type": "account_age",
-        "requirement_value": 365
+        "requirement_value": 365,
+        "img_src": "/achievements/veteran-player.png"
     },
     {
         "name": "Match Maker",
         "slug": "match-maker",
         "description": "Entra na tua primeira partida",
         "requirement_type": "joined_match",
-        "requirement_value": 1
+        "requirement_value": 1,
+        "img_src": "/achievements/match-maker.png"
     },
     {
         "name": "Padel Enthusiast",
         "slug": "padel-enthusiast",
         "description": "Entra em 10 partidas",
         "requirement_type": "joined_match",
-        "requirement_value": 10
+        "requirement_value": 10,
+        "img_src": "/achievements/padel-enthusiast.png"
     },
     {
         "name": "Padel Master",
         "slug": "padel-master",
         "description": "Entra em 100 partidas",
         "requirement_type": "joined_match",
-        "requirement_value": 100
+        "requirement_value": 100,
+        "img_src": "/achievements/padel-master.png"
     }
 ]
