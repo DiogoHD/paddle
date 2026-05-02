@@ -33,7 +33,7 @@ export const findUsers = async (token: string, query: string) => {
 
   const res = await apiRequest({
     method: "GET",
-    path: `accounts/filter/posts?name=${encodeURIComponent(query)}`,
+    path: `accounts/search/?name=${encodeURIComponent(query)}`,
     token,
   });
 
@@ -43,6 +43,8 @@ export const findUsers = async (token: string, query: string) => {
 
   return res.data;
 }
+
+
 export const getUserPublicProfile = async (token: string, userId: string) => {
   const res = await apiRequest({
     method: "GET",

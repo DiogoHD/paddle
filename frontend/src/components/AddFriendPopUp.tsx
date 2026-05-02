@@ -3,17 +3,7 @@ import { useState, useEffect } from "react";
 import type { UserPublicProfile } from "@/types/accounts";
 import { findUsers } from "@/api/db/accountsApi";
 import useDebounce from "@/hooks/useDebounce";
-
-const mockUsers: UserPublicProfile[] = [
-  { public_id: "1", name: "Maria Santos", course: "Engenharia Informática", age: 22, image: null },
-  { public_id: "2", name: "Carlos Oliveira", course: "Engenharia Informática", age: 24, image: "https://randomuser.me/api/portraits/men/2.jpg" },
-  { public_id: "3", name: "Ana Costa", course: "Engenharia Informática", age: 21, image: "https://randomuser.me/api/portraits/women/3.jpg" },
-  { public_id: "4", name: "João Pereira", course: "Engenharia Informática", age: 23, image: null },
-  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
-  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
-  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
-  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
-];
+import useAuth from "@/hooks/useAuth";
 
 function BodyEntry({
   person,
@@ -42,16 +32,24 @@ function BodyEntry({
 
 export function AddFriendPopUp() {
   const [isOpen, setIsOpen] = useState(false);
+  const { accessToken } = useAuth();
 
+  const [data, setData] = useState<UserPublicProfile[]>([]);
+  const [searchText, setSearchText] = useState("");
 
-    const [data, setData] = useState([]);
-    const [searchText, setSearchText] = useState("");
-  
-    const debounce = useDebounce(searchText, 500);
+  const debounce = useDebounce(searchText, 500);
 
-    useEffect(()=> {
-     findUsers(token, searchText);
-    }, [debounce]);
+  useEffect(()=> {
+    const fetchUsers = async () => {
+      if (debounce) {
+        const users = await findUsers(accessToken!, debounce);
+        setData(users);
+      } else {
+        setData([]);
+      }
+    };
+    fetchUsers();
+  }, [debounce, accessToken]);
   
   return (
     <>
@@ -83,7 +81,7 @@ export function AddFriendPopUp() {
             </div>
           {/* Content */}
             <div className="p-4 flex flex-col gap-4 max-h-96 overflow-y-auto">
-              {mockUsers.map(user => (
+              {data.map(user => (
                 <BodyEntry key={user.public_id} person={user} />
               ))}
             </div>
