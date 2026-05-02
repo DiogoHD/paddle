@@ -15,6 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
             'birthday',
             'course',
             'phone_number',
+            'image',
             'created_at',
         ]
 
@@ -22,6 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PublicUserSerializer(serializers.ModelSerializer):
     """Leitura de perfil de outro utilizador - info limitada"""
     age = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
     
     class Meta:
         model = User
@@ -30,6 +32,7 @@ class PublicUserSerializer(serializers.ModelSerializer):
             'name',
             'course',
             'age',
+            'image',
         ]
     
     def get_age(self, obj):
@@ -39,6 +42,13 @@ class PublicUserSerializer(serializers.ModelSerializer):
         return today.year - obj.birthday.year - (
             (today.month, today.day) < (obj.birthday.month, obj.birthday.day)
         )
+    
+    def get_image(self, obj):
+        if obj.image:
+            request = self.context.get('request')
+            if request is not None:
+                return request.build_absolute_uri(obj.image.url)
+        return None
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
@@ -53,6 +63,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             'birthday',
             'course',
             'phone_number',
+            'image',
         ]
 
     def validate_email(self, value):
@@ -73,4 +84,5 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             'birthday',
             'course',
             'phone_number',
+            'image',
         ]

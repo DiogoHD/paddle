@@ -1,8 +1,9 @@
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import User
 from .serializers import UserSerializer, PublicUserSerializer, RegisterSerializer, UpdateUserSerializer
@@ -40,6 +41,7 @@ def register(request: Request):
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
 def update_profile(request: Request):
     """Atualização do perfil do utilizador autenticado"""
     serializer = UpdateUserSerializer(request.user, data=request.data, partial=True)

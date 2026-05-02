@@ -1,10 +1,10 @@
+import type { UserPublicProfile } from "./accounts";
+
 export type Visibility = "public" | "private";
 
 export interface MatchPlayer {
   public_id: string;
-  img_src: string;
-  user: string;
-  user_name: string;
+  user: UserPublicProfile;
   team: "A" | "B";
 }
 
