@@ -222,7 +222,7 @@ function ListPlayers({
   access: "public" | "private"
 }) {
   return (
-    <div className="grid grid-cols-2 gap-4  items-center justify-center">
+    <div className={`grid ${team.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-4`}>
       {team.map((player, index) => (
         <div key={index} className="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded-xl shadow-sm">
           {player ? (
@@ -313,16 +313,15 @@ function MatchDetailsPopUp({
           </div>
 
           {/* Players Section */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <UsersRound size={20} className="text-gray-400" />
-              <h3 className="font-bold text-gray-700">Jogadores</h3>
-            </div>
+          <div className="flex items-center gap-2 mb-4">
+            <UsersRound size={20} className="text-gray-400" />
+            <h3 className="font-bold text-gray-700">Jogadores</h3>
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-2">
             <ListPlayers team={team1} access={match.visibility} />
             
-            <div className="inline-flex items-center justify-center w-full">
-              <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
-            </div>
+            <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
             
             <ListPlayers team={team2} access={match.visibility} />
           </div>
