@@ -1,5 +1,6 @@
-import { MatchHeader } from "@/components/headers";
-import { MatchPopUp } from "@/components/popups";
+import { Header } from "@/components/headers";
+import { CreateMatchPopUp, FiltersPopUp } from "@/components/popups";
+import { MatchCard } from "@/components/cards";
 
 const group1 = [
   {
@@ -104,9 +105,9 @@ const matches = [
 
 export default function MatchPage() {
   return (
-    <div className="min-h-screen w-full gap-4 flex flex-col overflow-y-auto no-scrollbar">
-      <MatchHeader />
-      <div className="flex flex-col items-center justify-center gap-4 p-4">
+    <div className="h-full w-full gap-4 flex flex-col no-scrollbar">
+      <Header text="Procurar Partida" leftNode={<CreateMatchPopUp />} rightNode={<FiltersPopUp />} />
+      <div className="flex flex-col items-center justify-center gap-4 p-2">
         {matches.map((match, index) => (
           <MatchPopUp
             match={match}
