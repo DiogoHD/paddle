@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'matches',
     'authentication',
     'friends',
+    'gamification',
 ]
 
 MIDDLEWARE = [
