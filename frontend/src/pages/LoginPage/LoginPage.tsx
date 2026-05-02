@@ -1,6 +1,5 @@
-{/*
 import useAuth from "@/hooks/useAuth";
-import { useState } from "react";
+import app_logo from "@/assets/app-logo.png";
 import {
   type FieldErrors,
   type Path,
@@ -39,14 +38,12 @@ function loginInput({
     <div className="flex flex-col gap-2 mt-10 w-full">
       <label
         htmlFor={id}
-        className="font-suisse-condensed text-xl text-surface950"
+        className="font-bold text-sm text-gray-800 mb-1"
       >
         {label}
       </label>
       <input
-        className={`w-full py-2 px-4 align-middle font-suisse focus:outline-none border rounded-full ${
-          errors[id] ? "border-error600" : "border-surface950"
-        }`}
+        className="w-full text-black py-2 px-4 align-middle focus:outline-none border rounded-full"
         id={id}
         {...register(id, {
           required: "Campo obrigatório.",
@@ -67,8 +64,7 @@ function loginInput({
   );
 }
 
-export default function Login() {
-  const [forgotPassword, setForgotPassword] = useState(false);
+export default function LoginPage() {
   const {
     register,
     handleSubmit,
@@ -91,107 +87,83 @@ export default function Login() {
     }
   };
 
-  return (
-    <div className="relative min-h-screen h-screen w-screen overflow-x-hidden overflow-y-auto no-scrollbar">
+ return (
+  <div className="min-h-screen w-full bg-white flex flex-col">
 
-      <div className="relative z-10 mx-auto w-full max-w-sm md:max-w-none md:w-1/3 min-h-full py-12 flex flex-col items-center bg-white">
-        <h2 className="mb-[clamp(4rem,16vh,24rem)] font-suisse-condensed text-4xl text-primary500 text-center">
-          Paddle
-        </h2>
+    <div className="bg-primary-blue h-[40vh] flex flex-col items-center justify-center pb-12">
 
-        {forgotPassword ? (
-          <>
-            <div className="gap-2 flex flex-col items-center">
-              <h1 className="font-suisse-condensed text-6xl text-primary800 text-center">
-                Esqueceu a senha?
-              </h1>
-
-              <h3 className="max-w-80 text-sm text-surface950 font-suisse text-center">
-                Insere o teu email e enviaremos um link para recuperares a tua
-                password.
-              </h3>
-            </div>
-
-            <form
-              onSubmit={handleSubmit((data) => {
-                reset();
-                console.log(
-                  "Send email to recover password",
-                  data.recoveryEmail,
-                );
-              })}
-              className="w-full max-w-80 flex flex-col"
-            >
-              {loginInput({
-                id: "recoveryEmail",
-                label: "Email",
-                type: "email",
-                msg: "Voltar ao login.",
-                errors,
-                register,
-                handleClick: (e) => {
-                  e.stopPropagation();
-                  !errors?.recoveryEmail && setForgotPassword(!forgotPassword);
-                },
-              })}
-
-              <button
-                type="submit"
-                className="mt-8 w-full max-w-80 py-2 px-4 bg-primary500 text-white font-suisse rounded-full hover:bg-primary600 disabled:bg-primary300 disabled:cursor-not-allowed"
-              />
-            </form>
-          </>
-        ) : (
-          <>
-            <h1 className="font-suisse-condensed text-6xl text-primary800 text-center text-nowrap">
-              Iniciar Sessão
-            </h1>
-
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="w-full max-w-80 flex flex-col"
-            >
-              {loginInput({
-                id: "email",
-                label: "Email",
-                type: "email",
-                errors,
-                register,
-                onFieldChange: () => clearErrors("root"),
-              })}
-
-              {loginInput({
-                id: "password",
-                label: "Senha",
-                type: "password",
-                className: "mt-6",
-                msg: "Esqueceste a password?",
-                errors,
-                register,
-                onFieldChange: () => clearErrors("root"),
-                handleClick: (e) => {
-                  e.stopPropagation();
-                  !errors?.password && setForgotPassword(!forgotPassword);
-                },
-              })}
-              {errors.root && (
-                <span
-                  role="alert"
-                  className="mt-4 font-suisse text-xs text-error600 text-center"
-                >
-                  {errors.root.message}
-                </span>
-              )}
-              <button
-                type="submit"
-                className="mt-8 w-full max-w-80 py-2 px-4 bg-primary500 text-white font-suisse rounded-full hover:bg-primary600 disabled:bg-primary300 disabled:cursor-not-allowed"
-              />
-            </form>
-          </>
-        )}
+      <div className="size-32 rounded-full border-2 border-dashed border-white/80 flex items-center justify-center p-1 mb-4">
+        <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+           <img src={app_logo} alt="Logo" className="w-32 h-32 object-contain"/>
+        </div>
       </div>
-
+      <p className="text-2xl text-white font-medium">Paddle UC</p>
     </div>
+
+    <div className="flex-1 bg-white -mt-10 rounded-t-[45px] px-8 pt-10 shadow-2xl">
+      <div className="w-full max-w-sm mx-auto flex flex-col">
+        <h1 className="font-bold text-3xl text-center text-[#061237] mb-8">
+          Iniciar Sessão
+        </h1>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col space-y-4"
+        >
+          {loginInput({
+            id: "email",
+            label: "Email",
+            type: "email",
+            errors,
+            register,
+            onFieldChange: () => clearErrors("root"),
+          })}
+
+          {loginInput({
+            id: "password",
+            label: "Senha",
+            type: "password",
+            errors,
+            register,
+            onFieldChange: () => clearErrors("root"),
+          })}
+
+          {errors.root && (
+            <span role="alert" className="text-xs text-center text-red-600">
+              {errors.root.message}
+            </span>
+          )}
+
+          {/* Login Button */}
+          <button
+            type="submit"
+            className="mt-4 w-full py-3 px-4 bg-primary-blue text-white font-bold rounded-full shadow-lg hover:bg-blue-500 transition-colors"
+          >
+            Iniciar Sessão
+          </button>
+
+          {/* Forgot Password Link 
+          <button 
+            type="button"
+            className="text-sm text-blue-400 mt-2 hover:underline"
+            onClick={() => setForgotPassword(true)}
+          >
+            Esqueci minha senha
+          </button>
+          */}
+        </form>
+
+        <div className="mt-8 text-center text-sm">
+          <p className="text-gray-600">
+            Ainda não tem conta?
+            <span className="text-blue-400 font-bold cursor-pointer hover:underline">
+              Cadastre-se aqui
+            </span>
+          </p>
+          
+        </div>
+      </div>
+    </div>
+  </div>
   );
 }
-  */}
