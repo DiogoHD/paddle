@@ -47,7 +47,7 @@ export const getMatchDetails = async (token: string, matchId: string): Promise<M
 export const joinMatch = async (token: string, matchId: string): Promise<MatchPlayer> => {
   const res = await apiRequest({
     method: "POST",
-    path: `matches/join/${matchId}/`,
+    path: `matches/${matchId}/join/`,
     token
   });
 

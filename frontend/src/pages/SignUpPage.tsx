@@ -9,6 +9,7 @@ import {
 
 const defaultValues = {
   email: "",
+  name: "",
   number: "",
   password: "",
   confirmPassword: "",
@@ -74,24 +75,28 @@ export default function SignUpPage() {
     setError,
     clearErrors,
   } = useForm<FormValues>({ defaultValues });
-  const { login } = useAuth();
+  const { signup } = useAuth();
 
   const onSubmit = async (data: FormValues) => {
+    if (data.password !== data.confirmPassword) {
+      setError("confirmPassword", { message: "As senhas não coincidem." });
+      return;
+    }
     try {
-      await login(data.email, data.password);
+      await signup(data.email, data.password, data.number, data.name);
       reset();
     } catch (error: any) {
       setError("root", {
         type: "manual",
-        message: error.message || "Ocorreu um erro durante o login.",
+        message: error.message || "Erro ao criar conta.",
       });
     }
   };
 
  return (
-  <div className="min-h-screen w-full bg-white flex flex-col">
+  <div className="h-screen w-full bg-white flex flex-col overflow-hidden">
 
-    <div className="bg-primary-blue h-[40vh] flex flex-col items-center justify-center pb-12">
+    <div className="bg-primary-blue h-[40vh] shrink-0 flex flex-col items-center justify-center pb-12">
 
       <div className="size-32 rounded-full border-2 border-dashed border-white/80 flex items-center justify-center p-1 mb-4">
         <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
@@ -101,8 +106,8 @@ export default function SignUpPage() {
       <p className="text-2xl text-white font-medium">Padle UC</p>
     </div>
 
-    <div className="flex-1 bg-white -mt-10 rounded-t-[45px] px-8 pt-8 shadow-2xl">
-      <div className="w-full max-w-sm mx-auto flex flex-col">
+    <div className="flex-1 bg-white -mt-10 rounded-t-[45px] px-8 pt-8 shadow-2xl overflow-y-auto">
+      <div className="w-full max-w-sm mx-auto flex flex-col pb-8">
         <h1 className="font-bold text-3xl text-center text-black mb-8">
           Criar Conta
         </h1>
@@ -124,6 +129,15 @@ export default function SignUpPage() {
             id: "number",
             label: "Número",
             type: "number",
+            errors,
+            register,
+            onFieldChange: () => clearErrors("root"),
+          })}
+
+          {registerInput({
+            id: "name",
+            label: "Nome",
+            type: "text",
             errors,
             register,
             onFieldChange: () => clearErrors("root"),
@@ -155,7 +169,7 @@ export default function SignUpPage() {
 
           <button
             type="submit"
-            className="mt-4 w-full py-3 px-4 bg-primary-blue text-white font-bold rounded-full shadow-lg hover:bg-blue-500 transition-colors"
+            className="mt-4 w-full py-3 px-4 bg-primary-blue text-white font-bold rounded-full shadow-lg hover:bg-blue-500 hover:cursor-pointer transition-colors"
           >
             Criar Conta
           </button>

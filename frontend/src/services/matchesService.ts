@@ -1,7 +1,7 @@
 import useAuth from "@hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { getMatches, getUserMatches, getUserMatchHistory, createMatch } from "@api/db/matchesApi";
+import { getMatches, getUserMatches, getUserMatchHistory, createMatch, joinMatch } from "@api/db/matchesApi";
 import type { CreateMatchPayload, Match } from "@appTypes/matches";
 
 const StaleTime = 1000 * 60 * 5; // 5 minutes
@@ -51,6 +51,19 @@ export const useCreateMatch = () => {
     mutationFn: (matchData: CreateMatchPayload) => createMatch(accessToken!, matchData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["matches"] });
+    }
+  });
+}
+
+export const useJoinMatch = (matchId: string) => {
+  const { accessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => joinMatch(accessToken!, matchId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["matches"] });
+      queryClient.invalidateQueries({ queryKey: ["userMatches"] });
     }
   });
 }

@@ -29,3 +29,8 @@ export interface CreateMatchPayload {
   end_time?: string;
   is_private: boolean;
 }
+
+export interface CreateMatchPlayer {
+  user_id: string;
+  team: "A" | "B";
+}

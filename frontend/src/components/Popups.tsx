@@ -4,6 +4,7 @@ import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
 import Dropdown from '@/components/Dropdown';
 import { useCreateMatch } from '@services/matchesService';
+import { useJoinMatch } from '@services/matchesService';
 
 interface PopUpProps {
   isOpen: boolean;
@@ -246,10 +247,29 @@ function PopUpEntry1({
   );
 }
 
+function JoinSlot({ matchId, access }: { matchId: string, access: "public" | "private" }) {
+  const { mutate: joinMatch, isPending } = useJoinMatch(matchId);
+
+  return (
+    <button 
+      onClick={() => joinMatch()}
+      disabled={isPending}
+      className='flex flex-row justify-between items-center gap-3 hover:cursor-pointer disabled:opacity-50'
+    >
+      <PlusCircle className="text-primary-blue" size={32} />
+      <p className="text-md font-medium text-gray-700">
+        {isPending ? "A entrar..." : access === "public" ? "Entrar" : "Pedir para entrar"}
+      </p>
+    </button>
+  );
+}
+
 function ListPlayers({
+  matchId,
   access,
   team
 }: {
+  matchId: string,
   team: (MatchPlayer|null)[],
   access: "public" | "private"
 }) {
@@ -275,12 +295,7 @@ function ListPlayers({
               </span>
             </div>
           ) : (
-            <div className='flex flex-row justify-between items-center gap-3'>
-              <PlusCircle className="text-primary-blue" size={32} />
-              <p className="text-md text-inline font-medium text-gray-700">
-                {access === "public" ? "Entrar" : "Pedir para entrar"}
-              </p>
-            </div>
+            <JoinSlot matchId={matchId} access={access} />
           )}
         </div>
       ))}
@@ -296,9 +311,12 @@ function MatchDetailsPopUp({
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const maxPerTeam = match.match_type === "SINGLE" ? 1 : 2;
   const midIndex = Math.ceil(match.players.length / 2);
-  const team1 = match.players.slice(0, midIndex);
-  const team2 = match.players.slice(midIndex);
+  const team1Raw = match.players.slice(0, midIndex);
+  const team2Raw = match.players.slice(midIndex);
+  const team1 = [...team1Raw, ...Array(maxPerTeam - team1Raw.length).fill(null)];
+  const team2 = [...team2Raw, ...Array(maxPerTeam - team2Raw.length).fill(null)];
 
   const date = new Date(match.start_time).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
   const dateString = date.charAt(0).toUpperCase() + date.slice(1);
@@ -353,17 +371,17 @@ function MatchDetailsPopUp({
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
-            <ListPlayers team={team1} access={match.is_private ? "private" : "public"} />
+            <ListPlayers matchId={match.public_id} team={team1} access={match.is_private ? "private" : "public"} />
             
             <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
             
-            <ListPlayers team={team2} access={match.is_private ? "private" : "public"} />
+            <ListPlayers matchId={match.public_id} team={team2} access={match.is_private ? "private" : "public"} />
           </div>
 
           {/* Action Button */}
           <button 
             onClick={() => setIsOpen(false)}
-            className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 w-full"
+            className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 w-full hover:cursor-pointer"
           >
             Fechar Detalhes
           </button>
