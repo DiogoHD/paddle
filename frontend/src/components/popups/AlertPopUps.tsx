@@ -1,4 +1,4 @@
-import { PopUp } from '@components/popups/popups';
+import { PopUp } from '@components/Popups';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import useAuth from "@/hooks/useAuth";

@@ -1,7 +1,7 @@
-import { MatchCard } from '@components/cards';
+import { MatchCard } from '@components/MatchCard';
 import type { Match, MatchPlayer } from '@appTypes/matches';
 import { PlusCircle, Calendar, Clock, MapPin, UsersRound, DoorOpen } from 'lucide-react';
-import { PopUp } from '@components/popups/popups';
+import { PopUp } from '@components/Popups';
 import { useState } from 'react';
 
 function PopUpEntry1({

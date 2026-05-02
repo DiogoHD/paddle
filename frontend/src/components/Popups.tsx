@@ -1,12 +1,5 @@
 import { useState } from 'react';
-<<<<<<<< HEAD:frontend/src/components/popups/popups.tsx
-import { Plus, ListFilter, X } from 'lucide-react';
-
-========
-import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
-import { MatchCard } from '@components/MatchCard';
-import type { Match, MatchPlayer } from '@appTypes/matches';
->>>>>>>> origin/main:frontend/src/components/Popups.tsx
+import { Plus, ListFilter, X} from 'lucide-react';
 interface PopUpProps {
   isOpen: boolean;
   onClose: () => void;

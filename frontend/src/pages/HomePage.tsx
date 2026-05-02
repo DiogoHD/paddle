@@ -1,8 +1,8 @@
 import { Header } from "@/components/Headers";
-import { FiltersPopUp } from "@/components/Popups";
 import { EmptyState, LoadingState } from "@/components/States";
 import { useUserMatches } from "@services/matchesService";
-import { MatchDetailsPopUp } from "@/components/Popups";
+import MatchDetailsPopUp from "@/components/popups/MatchDetailsPopUp";
+import { FiltersPopUp } from "@/components/Popups";
 
 export default function HomePage() {
   const { data: matches, isLoading, error } = useUserMatches();
