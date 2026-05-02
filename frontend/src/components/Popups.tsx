@@ -179,10 +179,10 @@ function FiltersPopUp() {
         <form className="flex flex-col gap-2 p-4">
           <div className='grid grid-cols-2 gap-2'>
             <div>
-              <label className="block font-bold text-gray-700 mb-2">Data</label>
+              <label className="block text-sm text-black">Data</label>
               <input 
                 type="date" 
-                className="w-full border text-black border-gray-200 rounded-xl shadow-sm p-2"
+                className="w-full border text-black border-gray-300 rounded-lg p-2"
               />
             </div>
                
