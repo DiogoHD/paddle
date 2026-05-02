@@ -1,6 +1,6 @@
 export function Header({ text, leftNode, rightNode }: { text: string; leftNode?: React.ReactNode; rightNode?: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-3 py-4 px-10 bg-primary-blue text-white w-full items-center">
+    <div className="grid grid-cols-3 py-4 px-10 bg-linear-to-t from-primary-blue to-blue-700 text-white w-full items-center">
       
       {/* Coluna da Esquerda */}
       <div className="flex justify-start">

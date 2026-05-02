@@ -43,7 +43,7 @@ function MatchCard({
               className="size-10 rounded-full"
             />
           ) : (
-            <PlusCircle className="size-10" />
+            <PlusCircle key={index} className="size-10" />
           )
         ))}
         <p className="font-bold text-lg mx-2 text-primary-blue">VS</p>
@@ -56,7 +56,7 @@ function MatchCard({
               className="size-10 rounded-full"
             />
           ) : (
-            <PlusCircle className="size-10" />
+            <PlusCircle key={index} className="size-10" />
           )
         ))}
       </div>      
