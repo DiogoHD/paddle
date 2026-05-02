@@ -13,7 +13,7 @@ export function NavBar() {
       </main>
 
       {/* NavBar: Fica sempre no fundo, sem flutuar por cima do conteúdo */}
-      <nav className="flex py-4 px-10 justify-between bg-primary-blue text-white w-full border-t border-blue-400">
+      <nav className="flex py-4 px-10 justify-between bg-primary-blue text-white w-full border-t bg-linear-to-b from-primary-blue to-blue-700">
         <Link to="/matches" className="hover:text-gray-300">
           <Search className="size-10" />
         </Link>
