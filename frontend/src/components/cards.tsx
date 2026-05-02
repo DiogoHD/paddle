@@ -1,6 +1,6 @@
 import { PlusCircle, Globe, Lock } from "lucide-react"
 
-type usr = {
+export type usr = {
   name: string,
   avatarUrl: string
 }
@@ -10,7 +10,7 @@ export type MatchCardProps = {
   start: string,
   end: string,
   pitch: number,
-  visibility: string,
+  visibility: "public" | "private",
   people: (usr|null)[]
 }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Plus, PlusCircle, EllipsisVertical, Calendar, Clock, MapPin, UsersRound, X, Eye } from 'lucide-react';
+import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
 import { MatchCard } from '@components/cards';
-import { type MatchCardProps } from '@components/cards';
+import { type MatchCardProps, type usr } from '@components/cards';
 interface PopUpProps {
   isOpen: boolean;
   onClose: () => void;
@@ -101,7 +101,7 @@ function CreateMatchPopUp() {
             </div>
 
             <div>
-              <label className="block text-sm text-black">Visibilidade</label>
+              <label className="block text-sm text-black">Acessibilidade</label>
               <select className="w-full border text-black border-gray-300 rounded-lg p-2 text-center">
                 <option value="public">Pública</option>
                 <option value="private">Privada</option>
@@ -144,7 +144,7 @@ function FiltersPopUp() {
 
   return (
     <>
-      <EllipsisVertical
+      <ListFilter
         className='size-8'
         onClick={() => setIsOpen(true)}
       />
@@ -214,6 +214,48 @@ function PopUpEntry1({
   );
 }
 
+function ListPlayers({
+  access,
+  team
+}: {
+  team: (usr|null)[],
+  access: "public" | "private"
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-4  items-center justify-center">
+      {team.map((player, index) => (
+        <div key={index} className="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+          {player ? (
+            <div className='flex flex-row justify-between items-center gap-3'>
+              <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
+                {player.avatarUrl ? (
+                  <img 
+                    src={player.avatarUrl}
+                    alt={player.name}
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                ) : (
+                  player.name.charAt(0).toUpperCase()
+                )}
+              </div>
+              <span className="text-md font-medium text-gray-700">
+                {player.name}
+              </span>
+            </div>
+          ) : (
+            <div className='flex flex-row justify-between items-center gap-3'>
+              <PlusCircle className="text-primary-blue" size={32} />
+              <p className="text-md text-inline font-medium text-gray-700">
+                {access === "public" ? "Entrar" : "Pedir para entrar"}
+              </p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function MatchDetailsPopUp({
   match
 }: {
@@ -222,6 +264,10 @@ function MatchDetailsPopUp({
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const midIndex = Math.ceil(match.people.length / 2);
+  const team1 = match.people.slice(0, midIndex);
+  const team2 = match.people.slice(midIndex);
+  
   const date = new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
   const dateString = date.charAt(0).toUpperCase() + date.slice(1);
 
@@ -249,8 +295,8 @@ function MatchDetailsPopUp({
             </PopUpEntry1>
 
             {/* Visibility */}
-            <PopUpEntry1 label="Visibilidade" title={match.visibility === "public" ? "Pública" : "Privada"}>
-              <Eye className="text-primary-blue" size={20} />
+            <PopUpEntry1 label="Acesso" title={match.visibility === "public" ? "Pública" : "Privada"}>
+              <DoorOpen className="text-primary-blue" size={20} />
             </PopUpEntry1>
           </div>
 
@@ -272,33 +318,13 @@ function MatchDetailsPopUp({
               <UsersRound size={20} className="text-gray-400" />
               <h3 className="font-bold text-gray-700">Jogadores</h3>
             </div>
+            <ListPlayers team={team1} access={match.visibility} />
             
-            <div className="grid grid-cols-2 gap-3">
-              {match.people.map((player, index) => (
-                <div key={index} className="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded-xl shadow-sm">
-                  {player ? (
-                    <div className='flex flex-row justify-between items-center gap-3'>
-                      <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
-                        {player.avatarUrl ? (
-                          <img 
-                            src={player.avatarUrl}
-                            alt={player.name}
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                        ) : (
-                          player.name.charAt(0).toUpperCase()
-                        )}
-                      </div>
-                      <span className="text-md font-medium text-gray-700">
-                        {player.name}
-                      </span>
-                    </div>
-                  ) : (
-                    <PlusCircle className="text-primary-blue" size={32} />
-                  )}
-                </div>
-              ))}
+            <div className="inline-flex items-center justify-center w-full">
+              <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
             </div>
+            
+            <ListPlayers team={team2} access={match.visibility} />
           </div>
 
           {/* Action Button */}
