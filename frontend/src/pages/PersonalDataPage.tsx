@@ -85,6 +85,9 @@ export default function PersonalDataPage() {
   const handleCancel = () => {
     setIsEditing(false);
     setPreviewUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   // Lida com a mudança de imagem, atualizando o formData e criando um preview
