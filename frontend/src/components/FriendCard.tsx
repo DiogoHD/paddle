@@ -30,11 +30,17 @@ export function FriendRequestCard({ name, img_src, onAccept, onReject }: { name:
   return (
     <div className="flex flex-row w-full justify-between items-center gap-4 bg-white rounded-4xl border border-primary-blue shadow-md p-4">
       <div className="flex flex-row items-center gap-2">
-        <img
-            src={img_src ?? undefined}
+        {img_src ? (
+          <img
+            src={img_src}
             alt={name}
             className="size-16 rounded-full object-cover"
-        />
+          />
+        ) : (
+          <div className="size-10 rounded-full bg-primary-blue flex items-center justify-center">
+            <p className="text-white text-2xl items-center">{name.charAt(0).toUpperCase()}</p>
+          </div>
+        )}
         <p className="flex-1 text-lg font-bold text-gray-800">{name}</p>
       </div>
       <div className="flex flex-row gap-2">
