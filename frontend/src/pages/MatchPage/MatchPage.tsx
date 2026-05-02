@@ -1,5 +1,5 @@
 import { MatchHeader } from "@/components/headers";
-import { MatchCard } from "@/components/cards";
+import { MatchPopUp } from "@/components/popups";
 
 const group1 = [
   {
@@ -33,6 +33,32 @@ const group2 = [
   },
 ]
 
+const group3 = [
+  {
+    name: "Mario",
+    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
+  },
+  null,
+]
+
+const group4 = [
+  {
+    name: "Carlos",
+    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
+  },
+  null,
+]
+
+const group5 = [
+  {
+    name: "Serra",
+    avatarUrl: "https://randomuser.me/api/portraits/men/1.jpg"
+  },
+  null,
+  null,
+  null
+]
+
 const matches = [
   {
     date: "2024-06-01",
@@ -49,6 +75,30 @@ const matches = [
     visibility: "private",
     pitch: 2,
     people: group2
+  },
+  {
+    date: "2026-02-03",
+    start: "09:00",
+    end: "10:00",
+    visibility: "public",
+    pitch: 3,
+    people: group3
+  },
+  {
+    date: "2025-02-02",
+    start: "10:00",
+    end: "12:00",
+    visibility: "private",
+    pitch: 2,
+    people: group4
+  },
+  {
+    date: "2024-11-15",
+    start: "12:00",
+    end: "14:00",
+    visibility: "private",
+    pitch: 4,
+    people: group5
   }
 ]
 
@@ -56,9 +106,9 @@ export default function MatchPage() {
   return (
     <div className="min-h-screen w-full gap-4 flex flex-col overflow-y-auto no-scrollbar">
       <MatchHeader />
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4 p-4">
         {matches.map((match, index) => (
-          <MatchCard
+          <MatchPopUp
             match={match}
             key={index}
           />

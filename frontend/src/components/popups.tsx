@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, EllipsisVertical } from 'lucide-react';
-
+import { MatchCard } from '@components/cards';
+import { type MatchCardProps } from '@components/cards';
 interface PopUpProps {
   isOpen: boolean;
   onClose: () => void;
@@ -177,9 +178,79 @@ function FiltersPopUp() {
   );
 }
 
+function BodyEntry({
+  entry
+}: {
+  entry: React.ReactNode;
+}) {
+  return (
+    <div className="flex justify-between flex-row border border-primary-blue rounded-lg shadow-md p-2 gap-4 w-full hover:bg-gray-200 items-center">
+      {entry}
+    </div>
+  );
+}
 
+
+function MatchPopUp({
+  match
+}: {
+  match: MatchCardProps
+}) {
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <MatchCard
+        match={match}
+        onClick={() => setIsOpen(true)}
+      />
+
+      <PopUp 
+        isOpen={isOpen} 
+        onClose={() => setIsOpen(false)} 
+        title="Detalhes da Partida"
+      >
+        <div className='flex flex-col gap-2'>
+          <BodyEntry
+            entry={<p className="text-lg font-bold">Campo: Campo {match.pitch}</p>}
+          />
+          <BodyEntry
+            entry={<p className="text-lg font-bold">Data: {new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' })}</p>}
+          />
+          <BodyEntry
+            entry={<p className="text-lg font-bold">Início: {match.start}</p>}
+          />
+          <BodyEntry
+            entry={<p className="text-lg font-bold">Fim: {match.end}</p>}
+          />
+          <BodyEntry
+            entry={<p className="text-lg font-bold">Campo: {match.pitch}</p>}
+          />
+          <BodyEntry
+            entry={<p className="text-lg font-bold">Visibilidade: {match.visibility}</p>}
+          />
+          {match.people.map((person, index) => (
+            person ? (
+              <BodyEntry
+                key={index}
+                entry={<p className="text-lg font-bold">Jogador {index + 1}: {person.name}</p>}
+              />
+            ) : (
+              <BodyEntry
+                key={index}
+                entry={<p className="text-lg font-bold">Jogador {index + 1}: Vaga</p>}
+              />
+            )
+          ))}
+        </div>
+      </PopUp>
+    </>
+  );
+}
 export {
   PopUp,
   CreateMatchPopUp,
-  FiltersPopUp
+  FiltersPopUp,
+  MatchPopUp
 }

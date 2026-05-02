@@ -5,7 +5,7 @@ type usr = {
   avatarUrl: string
 }
 
-type MatchCardProps = {
+export type MatchCardProps = {
   date: string,
   start: string,
   end: string,
@@ -16,9 +16,10 @@ type MatchCardProps = {
 
 
 function MatchCard({
-  match
-}: {
-  match: MatchCardProps
+  match,
+  ...props
+}: React.ComponentProps<"div"> & {
+  match: MatchCardProps 
 }) {
   const midIndex = Math.ceil(match.people.length / 2);
   const team1 = match.people.slice(0, midIndex);
@@ -27,12 +28,12 @@ function MatchCard({
   const dateString = new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
 
   return (
-    <div className="flex flex-col gap-4 max-w-md bg-white rounded-4xl border border-primary-blue shadow-md p-4">
+    <div className="flex flex-col gap-4 w-full bg-white rounded-4xl border border-primary-blue shadow-md p-4" {...props}>
       <div className="flex flex-row items-center justify-between text-xl font-bold">
         <p className="font-bold text-md">Campo {match.pitch}</p>
         <p className="font-bold">{match.start} - {match.end}</p>
       </div>
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row justify-center items-center gap-4">
         {team1.map((person, index) => (
           person ? (
             <img
