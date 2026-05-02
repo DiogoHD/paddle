@@ -2,10 +2,17 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import User
 from .serializers import UserSerializer, PublicUserSerializer, RegisterSerializer, UpdateUserSerializer
+
+def get_user_or_404(public_id: str) -> User:
+    try:
+        return User.objects.get(public_id=public_id)
+    except User.DoesNotExist:
+        raise NotFound("User not found")
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -18,15 +25,12 @@ def profile(request: Request):
 @permission_classes([IsAuthenticated])
 def public_profile(request: Request, public_id: str):
     """Perfil de outro utilizador - info limitada"""
-    try:
-        user = User.objects.get(public_id=public_id)
-    except User.DoesNotExist:
-        raise NotFound("User not found")
-    
+    user = get_user_or_404(public_id)
     serializer = PublicUserSerializer(user)
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register(request: Request):
     """Registo de novo utilizador"""
     serializer = RegisterSerializer(data=request.data)

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'accounts',
     'matches',
     'authentication',
+    'friends',
 ]
 
 MIDDLEWARE = [
