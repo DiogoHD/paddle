@@ -1,5 +1,5 @@
 import { apiRequest } from "@api/helpers/api";
-import type { Match, MatchPlayer } from "@appTypes/matches";
+import type { CreateMatchPayload, Match, MatchPlayer } from "@appTypes/matches";
 
 export const getMatches = async (token: string): Promise<Match[]> => {
   const res = await apiRequest<Match[]>({
@@ -15,7 +15,7 @@ export const getMatches = async (token: string): Promise<Match[]> => {
   return res.data;
 }
 
-export const createMatch = async (token: string, data: Omit<Match, "public_id" | "created_by" | "created_by_name">): Promise<Match> => {
+export const createMatch = async (token: string, data: CreateMatchPayload): Promise<Match> => {
   const res = await apiRequest({
     method: "POST",
     path: "matches/create/",
@@ -47,7 +47,7 @@ export const getMatchDetails = async (token: string, matchId: string): Promise<M
 export const joinMatch = async (token: string, matchId: string): Promise<MatchPlayer> => {
   const res = await apiRequest({
     method: "POST",
-    path: `matches/join/${matchId}/`,
+    path: `matches/${matchId}/join/`,
     token
   });
 

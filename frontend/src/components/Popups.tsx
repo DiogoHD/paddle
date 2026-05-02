@@ -3,6 +3,8 @@ import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, D
 import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
 import Dropdown from '@/components/Dropdown';
+import { useCreateMatch } from '@services/matchesService';
+import { useJoinMatch } from '@services/matchesService';
 
 interface PopUpProps {
   isOpen: boolean;
@@ -49,17 +51,9 @@ function PopUp({
   );
 }
 
-/* PopUp components */
 function CreateMatchPopUp() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const fieldOptions = [
-    { value: '1', label: 'Campo 1' },
-    { value: '2', label: 'Campo 2' },
-    { value: '3', label: 'Campo 3' },
-    { value: '4', label: 'Campo 4' },
-  ];
-  const [selectedField, setSelectedField] = useState(fieldOptions[0]);
+  const createMatch = useCreateMatch();
 
   const accessibilityOptions = [
     { value: 'public', label: 'Pública' },
@@ -68,55 +62,69 @@ function CreateMatchPopUp() {
   const [selectedAccessibility, setSelectedAccessibility] = useState(accessibilityOptions[0]);
 
   const matchTypeOptions = [
-    { value: '1v1', label: '1v1' },
-    { value: '2v2', label: '2v2' },
+    { value: 'SINGLE', label: '1v1' },
+    { value: 'TEAM', label: '2v2' },
   ];
   const [selectedMatchType, setSelectedMatchType] = useState(matchTypeOptions[0]);
 
+  const [date, setDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const start_time = new Date(`${date}T${startTime}`).toISOString();
+    const end_time = endTime ? new Date(`${date}T${endTime}`).toISOString() : undefined;
+
+    createMatch.mutate({
+      match_type: selectedMatchType.value as 'SINGLE' | 'TEAM',
+      is_private: selectedAccessibility.value === 'private',
+      start_time,
+      ...(end_time && { end_time }),
+    }, {
+      onSuccess: () => setIsOpen(false),
+    });
+  };
+
   return (
     <>
-      <Plus
-        className='size-8'
-        onClick={() => setIsOpen(true)}
-      />
+      <Plus className='size-8' onClick={() => setIsOpen(true)} />
 
-      <PopUp 
-        isOpen={isOpen} 
-        onClose={() => setIsOpen(false)} 
-        title="Criar Partida"
-      >
-        <form className="flex flex-col gap-4 p-4">
+      <PopUp isOpen={isOpen} onClose={() => setIsOpen(false)} title="Criar Partida">
+        <form className="flex flex-col gap-4 p-4" onSubmit={handleSubmit}>
           <div className='grid grid-cols-2 gap-4'>
             <div>
               <label className="block text-sm text-black">Data</label>
-              <input 
-                type="date" 
+              <input
+                type="date"
+                required
+                value={date}
+                onChange={e => setDate(e.target.value)}
                 className="w-full border text-black border-gray-300 rounded-lg p-2"
               />
             </div>
 
             <div>
               <label className="block text-sm text-black">Início</label>
-              <input 
-                type="time" 
+              <input
+                type="time"
+                required
+                value={startTime}
+                onChange={e => setStartTime(e.target.value)}
                 className="w-full border text-black border-gray-300 rounded-lg p-2"
               />
             </div>
 
             <div>
               <label className="block text-sm text-black">Fim</label>
-              <input 
-                type="time" 
+              <input
+                type="time"
+                value={endTime}
+                onChange={e => setEndTime(e.target.value)}
                 className="w-full border text-black border-gray-300 rounded-lg p-2"
               />
             </div>
-
-            <Dropdown
-              label="Campo"
-              options={fieldOptions}
-              selected={selectedField}
-              onSelect={setSelectedField}
-            />
 
             <Dropdown
               label="Acessibilidade"
@@ -124,7 +132,7 @@ function CreateMatchPopUp() {
               selected={selectedAccessibility}
               onSelect={setSelectedAccessibility}
             />
-               
+
             <Dropdown
               label="Tipo de Partida"
               options={matchTypeOptions}
@@ -132,6 +140,10 @@ function CreateMatchPopUp() {
               onSelect={setSelectedMatchType}
             />
           </div>
+
+          {createMatch.isError && (
+            <p className="text-red-500 text-sm">Erro ao criar partida. Tenta novamente.</p>
+          )}
 
           <div className="flex gap-2 mt-4">
             <button
@@ -143,9 +155,10 @@ function CreateMatchPopUp() {
             </button>
             <button
               type="submit"
-              className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700"
+              disabled={createMatch.isPending}
+              className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50"
             >
-              Criar
+              {createMatch.isPending ? 'A criar...' : 'Criar'}
             </button>
           </div>
         </form>
@@ -234,10 +247,29 @@ function PopUpEntry1({
   );
 }
 
+function JoinSlot({ matchId, access }: { matchId: string, access: "public" | "private" }) {
+  const { mutate: joinMatch, isPending } = useJoinMatch(matchId);
+
+  return (
+    <button 
+      onClick={() => joinMatch()}
+      disabled={isPending}
+      className='flex flex-row justify-between items-center gap-3 hover:cursor-pointer disabled:opacity-50'
+    >
+      <PlusCircle className="text-primary-blue" size={32} />
+      <p className="text-md font-medium text-gray-700">
+        {isPending ? "A entrar..." : access === "public" ? "Entrar" : "Pedir para entrar"}
+      </p>
+    </button>
+  );
+}
+
 function ListPlayers({
+  matchId,
   access,
   team
 }: {
+  matchId: string,
   team: (MatchPlayer|null)[],
   access: "public" | "private"
 }) {
@@ -263,12 +295,7 @@ function ListPlayers({
               </span>
             </div>
           ) : (
-            <div className='flex flex-row justify-between items-center gap-3'>
-              <PlusCircle className="text-primary-blue" size={32} />
-              <p className="text-md text-inline font-medium text-gray-700">
-                {access === "public" ? "Entrar" : "Pedir para entrar"}
-              </p>
-            </div>
+            <JoinSlot matchId={matchId} access={access} />
           )}
         </div>
       ))}
@@ -284,9 +311,12 @@ function MatchDetailsPopUp({
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const maxPerTeam = match.match_type === "SINGLE" ? 1 : 2;
   const midIndex = Math.ceil(match.players.length / 2);
-  const team1 = match.players.slice(0, midIndex);
-  const team2 = match.players.slice(midIndex);
+  const team1Raw = match.players.slice(0, midIndex);
+  const team2Raw = match.players.slice(midIndex);
+  const team1 = [...team1Raw, ...Array(maxPerTeam - team1Raw.length).fill(null)];
+  const team2 = [...team2Raw, ...Array(maxPerTeam - team2Raw.length).fill(null)];
 
   const date = new Date(match.start_time).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
   const dateString = date.charAt(0).toUpperCase() + date.slice(1);
@@ -341,17 +371,17 @@ function MatchDetailsPopUp({
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
-            <ListPlayers team={team1} access={match.is_private ? "private" : "public"} />
+            <ListPlayers matchId={match.public_id} team={team1} access={match.is_private ? "private" : "public"} />
             
             <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
             
-            <ListPlayers team={team2} access={match.is_private ? "private" : "public"} />
+            <ListPlayers matchId={match.public_id} team={team2} access={match.is_private ? "private" : "public"} />
           </div>
 
           {/* Action Button */}
           <button 
             onClick={() => setIsOpen(false)}
-            className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 w-full"
+            className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 w-full hover:cursor-pointer"
           >
             Fechar Detalhes
           </button>

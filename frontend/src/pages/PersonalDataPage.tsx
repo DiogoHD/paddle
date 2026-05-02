@@ -37,7 +37,7 @@ function InfoField({
     <div className="flex items-start gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
       <div className="mt-1 shrink-0">{icon}</div>
       <div className="flex flex-col items-start w-full text-start">
-        <span className="text-[10px] font-bold text-primary-blue uppercase tracking-widest mb-1">
+        <span className="text-5 font-bold text-primary-blue uppercase tracking-widest mb-1">
           {label}
         </span>
         

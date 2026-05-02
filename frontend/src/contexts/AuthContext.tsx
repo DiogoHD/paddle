@@ -22,6 +22,7 @@ interface AuthContextType {
   accessToken: string | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
+  signup: (email: string, password: string, number: string, name: string) => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -73,6 +74,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     navigate('/')
   }
 
+  const signup = async (email: string, password: string, student_number: string, name: string) => {
+    const res = await fetch(`${BASE_URL}/api/accounts/register/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, student_number, name }),
+    })
+
+    if (!res.ok) {
+      const error = await res.json()
+      const firstError = Object.values(error)[0] as string[]
+      throw new Error(firstError[0])
+    }
+
+    await login(email, password)
+  }
+
   useEffect(() => {
     if (!tokens) return
 
@@ -114,6 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         accessToken: tokens?.access ?? null,
         login,
         logout,
+        signup,
         isAuthenticated: !!user,
       }}
     >

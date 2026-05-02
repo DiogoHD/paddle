@@ -15,9 +15,13 @@ function MatchCard({
   match: Match,
   dateString: string
 }) {
+  const maxPerTeam = match.match_type === "SINGLE" ? 1 : 2;
   const midIndex = Math.ceil(match.players.length / 2);
-  const team1 = match.players.slice(0, midIndex);
-  const team2 = match.players.slice(midIndex);
+  const team1Raw = match.players.slice(0, midIndex);
+  const team2Raw = match.players.slice(midIndex);
+  const team1 = [...team1Raw, ...Array(maxPerTeam - team1Raw.length).fill(null)];
+  const team2 = [...team2Raw, ...Array(maxPerTeam - team2Raw.length).fill(null)];
+
   const startHour = new Date(match.start_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
   const endHour = new Date(match.end_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
 
