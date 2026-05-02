@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <div className="h-full w-full flex flex-col">
       <Header text="As Minhas Partidas" rightNode={<FiltersPopUp />} />
-      <div className="flex flex-col items-center justify-center align-middle p-6 gap-4 h-full w-full">
+      <div className="flex flex-col items-center justify-center align-middle p-4 gap-4 h-full w-full">
         {isLoading && <LoadingState message="Carregando partidas..." />}
         {error && <p className="text-2xl">Erro ao carregar partidas</p>}
         {matches && matches.length === 0 && (

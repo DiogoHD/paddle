@@ -14,7 +14,7 @@ export default function MatchHistoryPage() {
                 text="Histórico de Partidas" 
                 leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>} 
             />
-            <div className="flex flex-col items-center justify-center gap-4 p-6 h-full w-full">
+            <div className="flex flex-col items-center justify-center gap-4 p-4 h-full w-full">
                 {isLoading && <LoadingState message="Carregando histórico..." />}
                 {error && <p className="text-2xl">Erro ao carregar histórico</p>}
                 {matchHistory && matchHistory.length === 0 && (

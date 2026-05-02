@@ -8,22 +8,38 @@ from .models import FriendshipRequest
 class FriendshipRequestSerializer(serializers.ModelSerializer):
     from_user = serializers.ReadOnlyField(source='from_user.public_id')
     to_user = serializers.ReadOnlyField(source='to_user.public_id')
+    user_public_id = serializers.SerializerMethodField()
     
     from_user_name = serializers.CharField(source='from_user.name', read_only=True)
     to_user_name = serializers.CharField(source='to_user.name', read_only=True)
+    from_user_img_src = serializers.CharField(source='from_user.img_src', read_only=True)
+    to_user_img_src = serializers.CharField(source='to_user.img_src', read_only=True)
 
     class Meta:
         model = FriendshipRequest
         fields = [
-            'public_id', 
+            'public_id',
             'from_user', 
             'from_user_name', 
+            'from_user_img_src',
             'to_user', 
             'to_user_name', 
+            'to_user_img_src',
+            'user_public_id',
             'status', 
             'created_at'
         ]
         read_only_fields = fields
+    
+    def get_user_public_id(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            user = request.user
+            if obj.from_user == user:
+                return obj.to_user.public_id
+            elif obj.to_user == user:
+                return obj.from_user.public_id
+        return None
 
 class FriendshipRequestCreateSerializer(serializers.ModelSerializer):
     to_user = serializers.SlugRelatedField(
