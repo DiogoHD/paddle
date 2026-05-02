@@ -1,6 +1,7 @@
 import { Header } from "@/components/headers";
-import { CreateMatchPopUp, FiltersPopUp, MatchDetailsPopUp } from "@/components/popups";
+import { CreateMatchPopUp, FiltersPopUp } from "@/components/popups/popups";
 import { EmptyState, LoadingState } from "@/components/States";
+import MatchDetailsPopUp from "@/components/popups/MatchDetailsPopUp";
 import { useMatches } from "@services/matchesService";
 
 export default function MatchPage() {

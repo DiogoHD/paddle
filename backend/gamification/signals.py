@@ -30,7 +30,7 @@ def check_friendship_achievements(sender, instance, **kwargs):
 
 @receiver(user_logged_in)
 def check_account_age_achievements(sender, request, user, **kwargs):
-    days_since_joined = (now() - user.date_joined).days
+    days_since_joined = (now() - user.created_at).days
     
     potential_achievements = Achievement.objects.filter(
         requirement_type=Achievement.RequirementType.ACCOUNT_AGE,
