@@ -20,6 +20,7 @@ services:
     volumes:
       - ./backend:/app
       - static_files:/app/staticfiles
+    command: python manage.py runserver 0.0.0.0:8000
   
   db:
     image: postgres:16-alpine
