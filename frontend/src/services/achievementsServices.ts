@@ -1,7 +1,7 @@
 import useAuth from "@hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 
-import { getAchievements } from "@/api/db/achievementApi";
+import { getAchievements } from "@/api/db/achievementsApi";
 import type { Achievement } from "@/types/achievements";
 
 const StaleTime = 1000 * 60 * 5; // 5 minutes

@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { EmptyState, LoadingState } from "@/components/States";
+import { EmptyState, LoadingState, ErrorState } from "@/components/States";
 import { useUserMatchHistory } from "@/services/matchesService";
 import { MatchDetailsPopUp } from "@/components/Popups";
 
@@ -16,7 +16,7 @@ export default function MatchHistoryPage() {
             />
             <div className="flex flex-col items-center justify-center gap-4 p-4 h-full w-full">
                 {isLoading && <LoadingState message="Carregando histórico..." />}
-                {error && <p className="text-2xl">Erro ao carregar histórico</p>}
+                {error && <ErrorState message="Erro ao carregar histórico" />}
                 {matchHistory && matchHistory.length === 0 && (
                     <EmptyState message="Sem histórico de partidas" />
                 )}
