@@ -1,8 +1,8 @@
-import { Header } from "@/components/Headers";
+import { Header } from "@components/headers";
 import { ArrowLeft, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFriends, useRemoveFriend } from "@/services/friendsService";
-import { FriendCard } from "@/components/FriendCard";
+import { FriendCard } from "@components/friend";
 
 export default function FriendsPage() {
 

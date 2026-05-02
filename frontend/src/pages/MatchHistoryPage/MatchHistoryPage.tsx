@@ -1,9 +1,9 @@
-import { Header } from "@/components/Headers";
+import { Header } from "@components/headers";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { EmptyState, LoadingState } from "@/components/States";
 import { useUserMatchHistory } from "@/services/matchesService";
-import { MatchDetailsPopUp } from "@/components/Popups";
+import { MatchDetailsPopUp } from "@/components/popups";
 
 export default function MatchHistoryPage() {
   const { data: matchHistory, isLoading, error } = useUserMatchHistory();

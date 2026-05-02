@@ -1,5 +1,5 @@
-import { Header } from "@/components/Headers";
-import { CreateMatchPopUp, FiltersPopUp, MatchDetailsPopUp } from "@/components/Popups";
+import { Header } from "@/components/headers";
+import { CreateMatchPopUp, FiltersPopUp, MatchDetailsPopUp } from "@/components/popups";
 import { EmptyState, LoadingState } from "@/components/States";
 import { useMatches } from "@services/matchesService";
 

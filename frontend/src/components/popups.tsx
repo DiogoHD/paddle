@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
-import { MatchCard } from '@components/MatchCard';
-import type { Match, MatchPlayer } from '@appTypes/matches';
+import { MatchCard } from '@components/cards';
+import type { Match, MatchPlayer } from '@/types/matches';
 interface PopUpProps {
   isOpen: boolean;
   onClose: () => void;

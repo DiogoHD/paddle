@@ -1,7 +1,7 @@
-import { Header } from "@/components/Headers";
+import { Header } from "@components/headers";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { AchievementCard } from "@/components/AchievementCard";
+import { AchievementCard } from "@components/achievement";
 import { useAchievements } from "@/services/achievementServices";
 
 export default function AchievementsPage() {

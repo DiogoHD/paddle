@@ -7,7 +7,7 @@ import {
   FileUser,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Header } from "@/components/Headers";
+import { Header } from "@/components/headers";
 import useAuth from "@/hooks/useAuth";
 
 function BodyEntry({
