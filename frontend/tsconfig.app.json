@@ -25,12 +25,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
+      "@api/*": ["src/api/*"],
       "@assets/*": ["src/assets/*"],
       "@auth/*": ["src/auth/*"],
       "@components/*": ["src/components/*"],
       "@contexts/*": ["src/contexts/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@pages/*": ["src/pages/*"]
+      "@pages/*": ["src/pages/*"],
+      "@appTypes/*": ["src/types/*"]
     }
   },
   "include": ["src"]

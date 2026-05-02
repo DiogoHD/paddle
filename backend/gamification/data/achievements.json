@@ -1,52 +1,52 @@
 [
     {
-        "name": "O padel é melhor acompanhado",
+        "name": "Primeiro Amigo",
         "slug": "first-friend",
-        "description": "Adiciona o teu primeiro amigo.",
+        "description": "Adiciona o teu primeiro amigo",
         "requirement_type": "friend_count",
         "requirement_value": 1
     },
     {
-        "name": "Dá cá mais cinco",
+        "name": "Dá Cá Mais Cinco",
         "slug": "five-friends",
-        "description": "Adiciona 5 amigos.",
+        "description": "Adiciona 5 amigos",
         "requirement_type": "friend_count",
         "requirement_value": 5
     },
     {
         "name": "Sociallite",
         "slug": "sociallite",
-        "description": "Add 10 friends.",
+        "description": "Adiciona 10 amigos",
         "points": 50,
         "requirement_type": "friend_count",
         "requirement_value": 10
 
     },
     {
-        "name": "Parabéns a você",
+        "name": "Parabéns a Você",
         "slug": "veteran-player",
-        "description": "Have an account age of at least 1 year.",
+        "description": "Joga há mais de um ano",
         "requirement_type": "account_age",
         "requirement_value": 365
     },
     {
         "name": "Match Maker",
         "slug": "match-maker",
-        "description": "Entra na tua primeira partida.",
+        "description": "Entra na tua primeira partida",
         "requirement_type": "joined_match",
         "requirement_value": 1
     },
     {
         "name": "Padel Enthusiast",
         "slug": "padel-enthusiast",
-        "description": "Entra em 10 partidas.",
+        "description": "Entra em 10 partidas",
         "requirement_type": "joined_match",
         "requirement_value": 10
     },
     {
         "name": "Padel Master",
         "slug": "padel-master",
-        "description": "Entra em 100 partidas.",
+        "description": "Entra em 100 partidas",
         "requirement_type": "joined_match",
         "requirement_value": 100
     }
