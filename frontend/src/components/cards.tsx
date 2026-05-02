@@ -17,15 +17,15 @@ export type MatchCardProps = {
 
 function MatchCard({
   match,
+  dateString,
   ...props
 }: React.ComponentProps<"div"> & {
-  match: MatchCardProps 
+  match: MatchCardProps,
+  dateString: string
 }) {
   const midIndex = Math.ceil(match.people.length / 2);
   const team1 = match.people.slice(0, midIndex);
   const team2 = match.people.slice(midIndex);
-
-  const dateString = new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
 
   return (
     <div className="flex flex-col gap-4 w-full bg-white rounded-4xl border border-primary-blue shadow-md p-4" {...props}>

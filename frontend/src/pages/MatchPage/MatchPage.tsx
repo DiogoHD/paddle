@@ -1,6 +1,6 @@
 import { Header } from "@/components/headers";
 import { CreateMatchPopUp, FiltersPopUp } from "@/components/popups";
-import { MatchCard } from "@/components/cards";
+import { MatchDetailsPopUp } from "@/components/popups";
 
 const group1 = [
   {
@@ -109,7 +109,7 @@ export default function MatchPage() {
       <Header text="Procurar Partida" leftNode={<CreateMatchPopUp />} rightNode={<FiltersPopUp />} />
       <div className="flex flex-col items-center justify-center gap-4 p-2">
         {matches.map((match, index) => (
-          <MatchPopUp
+          <MatchDetailsPopUp
             match={match}
             key={index}
           />

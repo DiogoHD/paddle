@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, EllipsisVertical } from 'lucide-react';
+import { Plus, PlusCircle, EllipsisVertical, Calendar, Clock, MapPin, UsersRound, X, Eye } from 'lucide-react';
 import { MatchCard } from '@components/cards';
 import { type MatchCardProps } from '@components/cards';
 interface PopUpProps {
@@ -9,7 +9,12 @@ interface PopUpProps {
   children: React.ReactNode;
 }
 
-function PopUp({ isOpen, onClose, title, children }: PopUpProps) {
+function PopUp({
+  isOpen,
+  onClose,
+  title,
+  children 
+}: PopUpProps) {
   if (!isOpen) return null;
 
   return (
@@ -21,11 +26,22 @@ function PopUp({ isOpen, onClose, title, children }: PopUpProps) {
       />
       
       {/* Modal content */}
-      <div className="relative bg-white rounded-2xl shadow-lg p-6 max-w-sm w-11/12 z-10">
-        {title && (
-          <h2 className="text-2xl font-bold mb-4 text-primary-blue">{title}</h2>
-        )}
+      <div className="relative bg-white w-full max-w-md rounded-4xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+        
+        {/* Header with Background Accent */}
+        <div className="bg-linear-to-r from-primary-blue to-blue-700 px-6 py-6 text-white">
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+          <h2 className="text-2xl font-bold">{title}</h2>
+        </div>
+
+        {/* Content */}
         {children}
+
       </div>
     </div>
   );
@@ -178,20 +194,27 @@ function FiltersPopUp() {
   );
 }
 
-function BodyEntry({
-  entry
+function PopUpEntry1({
+  label,
+  title,
+  children
 }: {
-  entry: React.ReactNode;
+  label: string;
+  title: string;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="flex justify-between flex-row border border-primary-blue rounded-lg shadow-md p-2 gap-4 w-full hover:bg-gray-200 items-center">
-      {entry}
+    <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-2xl border border-gray-100">
+      {children}
+      <div className="flex flex-col">
+        <p className="text-sm uppercase text-gray-500 font-bold">{label}</p>
+        <p className="text-sm font-semibold text-gray-800">{title}</p>
+      </div>
     </div>
   );
 }
 
-
-function MatchPopUp({
+function MatchDetailsPopUp({
   match
 }: {
   match: MatchCardProps
@@ -199,10 +222,14 @@ function MatchPopUp({
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const date = new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' });
+  const dateString = date.charAt(0).toUpperCase() + date.slice(1);
+
   return (
     <>
       <MatchCard
         match={match}
+        dateString={dateString}
         onClick={() => setIsOpen(true)}
       />
 
@@ -211,38 +238,76 @@ function MatchPopUp({
         onClose={() => setIsOpen(false)} 
         title="Detalhes da Partida"
       >
-        <div className='flex flex-col gap-2'>
-          <BodyEntry
-            entry={<p className="text-lg font-bold">Campo: Campo {match.pitch}</p>}
-          />
-          <BodyEntry
-            entry={<p className="text-lg font-bold">Data: {new Date(match.date).toLocaleDateString('pt', { weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' })}</p>}
-          />
-          <BodyEntry
-            entry={<p className="text-lg font-bold">Início: {match.start}</p>}
-          />
-          <BodyEntry
-            entry={<p className="text-lg font-bold">Fim: {match.end}</p>}
-          />
-          <BodyEntry
-            entry={<p className="text-lg font-bold">Campo: {match.pitch}</p>}
-          />
-          <BodyEntry
-            entry={<p className="text-lg font-bold">Visibilidade: {match.visibility}</p>}
-          />
-          {match.people.map((person, index) => (
-            person ? (
-              <BodyEntry
-                key={index}
-                entry={<p className="text-lg font-bold">Jogador {index + 1}: {person.name}</p>}
-              />
-            ) : (
-              <BodyEntry
-                key={index}
-                entry={<p className="text-lg font-bold">Jogador {index + 1}: Vaga</p>}
-              />
-            )
-          ))}
+        {/* Content */}
+        <div className="p-6 space-y-6">
+          
+          {/* Main Info Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Court */}
+            <PopUpEntry1 label="Campo" title={`Campo ${match.pitch}`}>
+              <MapPin className="text-primary-blue" size={20} />
+            </PopUpEntry1>
+
+            {/* Visibility */}
+            <PopUpEntry1 label="Visibilidade" title={match.visibility === "public" ? "Pública" : "Privada"}>
+              <Eye className="text-primary-blue" size={20} />
+            </PopUpEntry1>
+          </div>
+
+          {/* Date & Time Row */}
+          <div className="flex items-center justify-between p-4 bg-[#061237] rounded-2xl text-white">
+            <div className="flex items-center gap-3">
+              <Calendar size={20} className="text-blue-400" />
+              <span className="text-sm font-medium">{dateString}</span>
+            </div>
+            <div className="flex items-center gap-3 border-l border-white/20 pl-4">
+              <Clock size={20} className="text-blue-400" />
+              <span className="text-sm font-medium">{match.start} - {match.end}</span>
+            </div>
+          </div>
+
+          {/* Players Section */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <UsersRound size={20} className="text-gray-400" />
+              <h3 className="font-bold text-gray-700">Jogadores</h3>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {match.people.map((player, index) => (
+                <div key={index} className="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                  {player ? (
+                    <div className='flex flex-row justify-between items-center gap-3'>
+                      <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
+                        {player.avatarUrl ? (
+                          <img 
+                            src={player.avatarUrl}
+                            alt={player.name}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          player.name.charAt(0).toUpperCase()
+                        )}
+                      </div>
+                      <span className="text-md font-medium text-gray-700">
+                        {player.name}
+                      </span>
+                    </div>
+                  ) : (
+                    <PlusCircle className="text-primary-blue" size={32} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action Button */}
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="w-full py-4 bg-primary-blue hover:bg-blue-600 text-white font-bold rounded-2xl shadow-lg transition-all active:scale-[0.98]"
+          >
+            Fechar Detalhes
+          </button>
         </div>
       </PopUp>
     </>
@@ -252,5 +317,5 @@ export {
   PopUp,
   CreateMatchPopUp,
   FiltersPopUp,
-  MatchPopUp
+  MatchDetailsPopUp
 }
