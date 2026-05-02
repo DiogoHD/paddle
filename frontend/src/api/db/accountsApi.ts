@@ -30,6 +30,22 @@ export const updateUserProfile = async (token: string, data: Record<string, any>
   return res.data;
 }
 
+export const findUsers = async (token: string, query: string) => {
+
+  const res = await apiRequest({
+    method: "GET",
+    path: `accounts/search/?name=${encodeURIComponent(query)}`,
+    token,
+  });
+
+  if (!res.success || !res.data) {
+    throw new Error("Failed to find users");
+  }
+
+  return res.data;
+}
+
+
 export const getUserPublicProfile = async (token: string, userId: string) => {
   const res = await apiRequest({
     method: "GET",

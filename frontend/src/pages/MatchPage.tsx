@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
-import { CreateMatchPopUp, FiltersPopUp, MatchDetailsPopUp } from "@/components/Popups";
+import { CreateMatchPopUp, MatchDetailsPopUp } from "@/components/Popups";
+import FiltersPopUp from "@/components/Filter";
 import { EmptyState, LoadingState, ErrorState } from "@/components/States";
 import { useMatches } from "@services/matchesService";
 

@@ -1,10 +1,11 @@
 import { Header } from "@/components/Header";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFriends, useRemoveFriendship, useRespondFriendshipRequest } from "@/services/friendsService";
 import { FriendCard, FriendRequestCard } from "@/components/FriendCard";
 import { useState } from "react";
 import { EmptyState, LoadingState } from "@components/States";
+import { AddFriendPopUp } from "@/components/AddFriendPopUp";
 
 type FriendsTab = "friends" | "received" | "sent";
 
@@ -30,7 +31,7 @@ export default function FriendsPage() {
       <Header 
         text="Amigos" 
         leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>}
-        rightNode={<Plus className="size-8 text-white" />}
+        rightNode={<AddFriendPopUp />}
       />
       {/* Tabs */}
       <div className="flex border-b border-gray-200 px-4">

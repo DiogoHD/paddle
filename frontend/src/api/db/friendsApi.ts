@@ -30,22 +30,20 @@ export const removeFriendship = async (token: string, friendshipId: string) => {
 }
 
 
-export const sendFriendRequest = async (token: string, data: { to_user_id: string }): Promise<FriendshipRequest> => {
+export const sendFriendRequest = async (token: string, data: { to_user: string }) => {
   const res = await apiRequest({
     method: "POST",
-    path: `friends/requests/send/`,
+    path: "friends/requests/send/",
     token,
-    data: {
-      to_user_id: data.to_user_id
-    }
+    data,
   });
 
-  if (!res.success || !res.data) {
+  if (!res.success) {
     throw new Error("Failed to send friend request");
   }
 
   return res.data;
-}
+};
 
 export const respondFriendshipRequest = async (token: string, requestId: string, status: "accepted" | "rejected") => {
   const res = await apiRequest({

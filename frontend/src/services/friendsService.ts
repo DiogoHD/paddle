@@ -36,10 +36,10 @@ export const useSendFriendRequest = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { to_user_id: string }) => sendFriendRequest(accessToken!, data),
+    mutationFn: (data: { to_user: string }) => sendFriendRequest(accessToken!, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friendRequests"] });
-    }
+      queryClient.invalidateQueries({ queryKey: ['friends'] });
+    },
   });
 }
 
