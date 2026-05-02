@@ -248,18 +248,18 @@ function ListPlayers({
           {player ? (
             <div className='flex flex-row justify-between items-center gap-3'>
               <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
-                {player.img_src ? (
+                {player.user.image ? (
                   <img 
-                    src={player.img_src}
-                    alt={player.user_name}
+                    src={player.user.image}
+                    alt={player.user.name}
                     className="w-full h-full rounded-full object-cover"
                   />
                 ) : (
-                  player.user_name.charAt(0).toUpperCase()
+                  player.user.name.charAt(0).toUpperCase()
                 )}
               </div>
               <span className="text-md font-medium text-gray-700">
-                {player.user_name}
+                {player.user.name}
               </span>
             </div>
           ) : (

@@ -18,14 +18,14 @@ def get_match_or_404(match_uuid: str) -> Match:
 @permission_classes([IsAuthenticated])
 def list_matches(request: Request) -> Response:
     matches = Match.objects.filter(end_time__gt=timezone.now())
-    serializer = MatchSerializer(matches, many=True)
+    serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def user_match_history(request: Request) -> Response:
     matches = Match.objects.filter(end_time__lte=timezone.now(), players__user=request.user)
-    serializer = MatchSerializer(matches, many=True)
+    serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)
 
 @api_view(["POST"])
@@ -34,7 +34,7 @@ def create_match(request: Request) -> Response:
     serializer = MatchCreateSerializer(data=request.data, context={"request": request})
     serializer.is_valid(raise_exception=True)
     match = serializer.save()
-    return Response(MatchSerializer(match).data, status=201)
+    return Response(MatchSerializer(match, context={"request": request}).data, status=201)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -52,7 +52,7 @@ def join_match(request: Request, match_uuid: str) -> Response:
         player.save()
     except ValidationError as e:
         return Response({"detail": e.messages}, status=400)
-    return Response(MatchPlayerSerializer(player).data, status=201)
+    return Response(MatchPlayerSerializer(player, context={"request": request}).data, status=201)
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
@@ -77,12 +77,12 @@ def leave_match(request: Request, match_uuid: str) -> Response:
 @permission_classes([IsAuthenticated])
 def get_match_details(request: Request, match_uuid: str) -> Response:
     match = get_match_or_404(match_uuid)
-    serializer = MatchSerializer(match)
+    serializer = MatchSerializer(match, context={"request": request})
     return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def list_user_matches(request: Request) -> Response:
     matches = Match.objects.filter(players__user=request.user, end_time__gt=timezone.now())
-    serializer = MatchSerializer(matches, many=True)
+    serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)

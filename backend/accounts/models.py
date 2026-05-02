@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     student_number = models.IntegerField(unique=True)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    img_src = models.URLField(blank=True, null=True)
+    image = models.ImageField(upload_to='profiles/', blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     course = models.CharField(max_length=255, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
