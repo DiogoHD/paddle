@@ -1,10 +1,11 @@
 import useAuth from "@hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 
-import { getAchievements } from "@api/db/achievements/achievementApi";
+import { getAchievements } from "@/api/db/achievementApi";
 import type { Achievement } from "@/types/achievements";
 
 const StaleTime = 1000 * 60 * 5; // 5 minutes
+const GCTime = 1000 * 60 * 60; // 10 minutes
 
 export const useAchievements = () => {
   const { accessToken } = useAuth();
@@ -13,6 +14,7 @@ export const useAchievements = () => {
     queryKey: ["achievements"],
     queryFn: () => getAchievements(accessToken!),
     staleTime: StaleTime,
-    enabled: !!accessToken, // Only run the query if accessToken is available
+    gcTime: GCTime,
+    enabled: !!accessToken,
   });
 };
