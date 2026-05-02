@@ -56,3 +56,15 @@ def delete_account(request: Request):
     user = request.user
     user.delete()
     return Response(status=204)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def filter_users(request: Request):
+    """Filtragem de utilizadores por name"""
+    name = request.GET.get('name')
+    if name is not None:
+        users = User.objects.filter(name__icontains=name)
+    else:
+        users = User.objects.all()
+    serializer = PublicUserSerializer(users, many=True)
+    return Response(serializer.data)

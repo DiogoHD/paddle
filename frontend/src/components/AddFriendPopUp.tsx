@@ -1,29 +1,40 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import type { UserPublicProfile } from "@/types/accounts";
+import { findUsers } from "@/api/db/accountsApi";
+import useDebounce from "@/hooks/useDebounce";
+
+const mockUsers: UserPublicProfile[] = [
+  { public_id: "1", name: "Maria Santos", course: "Engenharia Informática", age: 22, image: null },
+  { public_id: "2", name: "Carlos Oliveira", course: "Engenharia Informática", age: 24, image: "https://randomuser.me/api/portraits/men/2.jpg" },
+  { public_id: "3", name: "Ana Costa", course: "Engenharia Informática", age: 21, image: "https://randomuser.me/api/portraits/women/3.jpg" },
+  { public_id: "4", name: "João Pereira", course: "Engenharia Informática", age: 23, image: null },
+  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
+  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
+  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
+  { public_id: "5", name: "Sofia Almeida", course: "Engenharia Informática", age: 22, image: "https://randomuser.me/api/portraits/women/4.jpg" },
+];
 
 function BodyEntry({
-  label,
-  type = "text",
-  placeholder,
-  value,
-  onChange
+  person,
 }: {
-  label: string;
-  type?: string;
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
+  person: UserPublicProfile;
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <label className="block text-sm text-black">{label}</label>
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full border text-black border-gray-300 rounded-lg p-2"
-      />
+    <div className="flex flex-row border border-gray-500 rounded-full shadow-md p-2 gap-4 w-full hover:bg-gray-200 items-center hover:cursor-pointer">
+      {person.image ? (
+        <img 
+          src={person.image}
+          alt={person.name}
+          className="w-10 h-10 rounded-full object-cover"
+        />
+      ) : (
+        <div className="w-10 h-10 rounded-full bg-primary-blue flex items-center justify-center text-white text-lg font-bold">
+          {person.name.charAt(0).toUpperCase()}
+        </div>
+      )}
+      <p className="text-2xl text-bold text-gray-700">{person.name}</p>
+      <Plus className="size-10 text-2xl text-green-500 ml-auto cursor-pointer transition-colors" />
     </div>
   );
 }
@@ -31,6 +42,16 @@ function BodyEntry({
 
 export function AddFriendPopUp() {
   const [isOpen, setIsOpen] = useState(false);
+
+
+    const [data, setData] = useState([]);
+    const [searchText, setSearchText] = useState("");
+  
+    const debounce = useDebounce(searchText, 500);
+
+    useEffect(()=> {
+     findUsers(token, searchText);
+    }, [debounce]);
   
   return (
     <>
@@ -40,7 +61,7 @@ export function AddFriendPopUp() {
       />
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-auto">
           {/* Blurred background */}
           <div 
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -53,16 +74,22 @@ export function AddFriendPopUp() {
             {/* Search Bar */}
             <div className="p-4 border-b">
               <input 
-                type="text" 
+                type="search"
+                value={searchText}
+                onChange={e=> setSearchText(e.target.value)}
                 placeholder="Pesquisar amigos..." 
                 className="w-full text-black px-4 py-2 border rounded-full"
               />
             </div>
           {/* Content */}
-
+            <div className="p-4 flex flex-col gap-4 max-h-96 overflow-y-auto">
+              {mockUsers.map(user => (
+                <BodyEntry key={user.public_id} person={user} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+         </div>
+       )}
     </>
   );
 }
