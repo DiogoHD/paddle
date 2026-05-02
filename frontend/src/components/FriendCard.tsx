@@ -1,4 +1,4 @@
-import { Trash2, X, Check } from "lucide-react"
+import { X, Check } from "lucide-react"
 import { DeletePopUp } from "@components/AlertPopUps"
 
 export function FriendCard({ name, img_src, onRemove }: { name: string, img_src: string | null, onRemove: () => void }) {
