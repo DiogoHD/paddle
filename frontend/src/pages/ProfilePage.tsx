@@ -7,9 +7,10 @@ import {
   FileUser,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Header } from "@/components/Header";
+import { Header } from "@components/Header";
 
-import { LogoutPopUp } from "@/components/AlertPopUps";
+import { LogoutPopUp } from "@components/AlertPopUps";
+import { useUserProfile } from "@services/accountsService";
 
 function BodyEntry({
   icon,
@@ -29,12 +30,37 @@ function BodyEntry({
 
 export default function ProfilePage() {
 
+  const { data: user, isLoading, error } = useUserProfile();
+
+  if (isLoading) {
+    return (
+      <div className="h-full w-full flex items-center justify-center">
+        <p className="text-xl font-bold text-gray-500">A carregar perfil...</p>
+      </div>
+    );
+  }
+
+  const hasImage = user?.image && user.image.trim() !== "";
+  const profileImage = hasImage
+    ? (user.image.startsWith("http") 
+        ? user.image 
+        : `http://localhost:8000${user.image.startsWith('/') ? '' : '/'}${user.image}`)
+    : "/default-profile.png";
+  
+  if (error || !user) {
+    return (
+      <div className="h-full w-full flex items-center justify-center">
+        <p className="text-xl font-bold text-red-500">Erro ao carregar o utilizador.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full w-full gap-4 flex flex-col">
       <Header text="Perfil" />
 
-      <img className="rounded-full border-2 border-primary-blue size-32 mx-auto" src="https://randomuser.me/api/portraits/men/1.jpg" alt="Profile Image" />
-      <p className="text-center text-2xl font-bold">João Silva</p>
+      <img className="rounded-full border-2 border-primary-blue size-32 mx-auto" src={profileImage} alt="Profile Image" />
+      <p className="text-center text-2xl font-bold">{user?.name}</p>
 
       <div className="flex flex-col gap-4 p-4">
         <Link to="/personal-data"><BodyEntry icon={<FileUser className="size-10" />} label="Dados Pessoais" /></Link>
