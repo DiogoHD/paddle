@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'matches',
     'authentication',
     'friends',
-    'gamification',
+    'gamification.apps.GamificationConfig',
 ]
 
 MIDDLEWARE = [
@@ -155,6 +155,8 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGGING = {
     'version': 1,
