@@ -2,6 +2,7 @@ import useAuth from "@hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { getUserProfile, getUserPublicProfile, updateUserProfile } from "@api/db/accountsApi";
+import type { UserProfileUpdate } from "@appTypes/accounts";
 
 const StaleTime = 1000 * 60 * 5; // 5 minutes
 const GCTime = 1000 * 60 * 60; // 10 minutes
@@ -35,11 +36,13 @@ export const useUpdateUserProfile = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { name?: string; image?: File }) =>
+    mutationFn: (data: UserProfileUpdate) =>
       updateUserProfile(accessToken!, data),
-
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+    },
+    onError: (error) => {
+      console.error("Failed to update profile:", error);
     }
   });
 };

@@ -19,7 +19,8 @@ export const updateUserProfile = async (token: string, data: Record<string, any>
     method: "PUT",
     path: "accounts/me/update/",
     token,
-    data
+    data,
+    isMultipart: true
   });
 
   if (!res.success || !res.data) {
