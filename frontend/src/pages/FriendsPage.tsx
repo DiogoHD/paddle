@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFriends, useRemoveFriendship, useRespondFriendshipRequest } from "@/services/friendsService";
 import { FriendCard, FriendRequestCard } from "@/components/FriendCard";
