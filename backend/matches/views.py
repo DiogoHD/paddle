@@ -23,8 +23,8 @@ def list_matches(request: Request) -> Response:
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def user_match_history(request: Request, user_uuid: str) -> Response:
-    matches = Match.objects.filter(end_time__lte=timezone.now(), players__user__public_id=user_uuid)
+def user_match_history(request: Request) -> Response:
+    matches = Match.objects.filter(end_time__lte=timezone.now(), players__user=request.user)
     serializer = MatchSerializer(matches, many=True)
     return Response(serializer.data)
 
@@ -82,7 +82,7 @@ def get_match_details(request: Request, match_uuid: str) -> Response:
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def list_user_matches(request: Request, user_uuid: str) -> Response:
-    matches = Match.objects.filter(players__user__public_id=user_uuid, end_time__gt=timezone.now())
+def list_user_matches(request: Request) -> Response:
+    matches = Match.objects.filter(players__user=request.user, end_time__gt=timezone.now())
     serializer = MatchSerializer(matches, many=True)
     return Response(serializer.data)
