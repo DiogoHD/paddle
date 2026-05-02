@@ -9,13 +9,14 @@ import {
 
 const defaultValues = {
   email: "",
-  recoveryEmail: "",
+  number: "",
   password: "",
+  confirmPassword: "",
 };
 
 type FormValues = typeof defaultValues;
 
-function loginInput({
+function registerInput({
   id,
   msg,
   type,
@@ -64,7 +65,7 @@ function loginInput({
   );
 }
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const {
     register,
     handleSubmit,
@@ -103,14 +104,14 @@ export default function LoginPage() {
     <div className="flex-1 bg-white -mt-10 rounded-t-[45px] px-8 pt-8 shadow-2xl">
       <div className="w-full max-w-sm mx-auto flex flex-col">
         <h1 className="font-bold text-3xl text-center text-black mb-8">
-          Iniciar Sessão
+          Criar Conta
         </h1>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col space-y-4"
         >
-          {loginInput({
+          {registerInput({
             id: "email",
             label: "Email",
             type: "email",
@@ -119,9 +120,27 @@ export default function LoginPage() {
             onFieldChange: () => clearErrors("root"),
           })}
 
-          {loginInput({
+          {registerInput({
+            id: "number",
+            label: "Número",
+            type: "number",
+            errors,
+            register,
+            onFieldChange: () => clearErrors("root"),
+          })}
+
+          {registerInput({
             id: "password",
             label: "Senha",
+            type: "password",
+            errors,
+            register,
+            onFieldChange: () => clearErrors("root"),
+          })}
+
+          {registerInput({
+            id: "confirmPassword",
+            label: "Confirmar Senha",
             type: "password",
             errors,
             register,
@@ -134,34 +153,13 @@ export default function LoginPage() {
             </span>
           )}
 
-          {/* Login Button */}
           <button
             type="submit"
             className="mt-4 w-full py-3 px-4 bg-primary-blue text-white font-bold rounded-full shadow-lg hover:bg-blue-500 transition-colors"
           >
-            Iniciar Sessão
+            Criar Conta
           </button>
-
-          {/* Forgot Password Link 
-          <button 
-            type="button"
-            className="text-sm text-primary-blue mt-2 hover:underline"
-            onClick={() => setForgotPassword(true)}
-          >
-            Esqueci minha senha
-          </button>
-          */}
         </form>
-
-        <div className="mt-8 text-center text-sm">
-          <p className="text-gray-600">
-            Ainda não tem conta? {" "}
-            <a href="/signup" className="text-primary-blue font-bold cursor-pointer hover:underline">
-              Cadastre-se aqui
-            </a>
-          </p>
-          
-        </div>
       </div>
     </div>
   </div>

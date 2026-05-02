@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import { ProfileHeader } from "@/components/headers";
+import useAuth from "@/hooks/useAuth";
 
 function BodyEntry({
   icon,
@@ -26,6 +27,17 @@ function BodyEntry({
 }
 
 export default function ProfilePage() {
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // navigation handled by AuthContext
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full gap-4 flex flex-col overflow-y-auto no-scrollbar">
       <ProfileHeader />
@@ -39,6 +51,13 @@ export default function ProfilePage() {
         <BodyEntry icon={<Award className="size-10" />} label="Conquistas" />
         <BodyEntry icon={<FileChartColumn className="size-10" />} label="Histórico" />
         <BodyEntry icon={<Settings className="size-10" />} label="Configurações" />
+
+        <button
+          onClick={handleLogout}
+          className="mt-32 flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
+        >
+          Terminar Sessão
+        </button>
       </div>
     </div>
   );
