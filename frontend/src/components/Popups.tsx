@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
 import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
+import Dropdown from '@/components/dropdown';
+
 interface PopUpProps {
   isOpen: boolean;
   onClose: () => void;
@@ -47,10 +49,29 @@ function PopUp({
   );
 }
 
-
 /* PopUp components */
 function CreateMatchPopUp() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const fieldOptions = [
+    { value: '1', label: 'Campo 1' },
+    { value: '2', label: 'Campo 2' },
+    { value: '3', label: 'Campo 3' },
+    { value: '4', label: 'Campo 4' },
+  ];
+  const [selectedField, setSelectedField] = useState(fieldOptions[0]);
+
+  const accessibilityOptions = [
+    { value: 'public', label: 'Pública' },
+    { value: 'private', label: 'Privada' },
+  ];
+  const [selectedAccessibility, setSelectedAccessibility] = useState(accessibilityOptions[0]);
+
+  const matchTypeOptions = [
+    { value: '1v1', label: '1v1' },
+    { value: '2v2', label: '2v2' },
+  ];
+  const [selectedMatchType, setSelectedMatchType] = useState(matchTypeOptions[0]);
 
   return (
     <>
@@ -65,7 +86,7 @@ function CreateMatchPopUp() {
         title="Criar Partida"
       >
         <form className="flex flex-col gap-4 p-4">
-          <div className='grid grid-cols-2 gap-2'>
+          <div className='grid grid-cols-2 gap-4'>
             <div>
               <label className="block text-sm text-black">Data</label>
               <input 
@@ -90,31 +111,26 @@ function CreateMatchPopUp() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm text-black">Campo</label>
-              <select className="w-full border text-black border-gray-300 rounded-lg p-2 text-center">
-                <option value="public">Campo 1</option>
-                <option value="private">Campo 2</option>
-                <option value="private">Campo 3</option>
-                <option value="private">Campo 4</option>
-              </select>
-            </div>
+            <Dropdown
+              label="Campo"
+              options={fieldOptions}
+              selected={selectedField}
+              onSelect={setSelectedField}
+            />
 
-            <div>
-              <label className="block text-sm text-black">Acessibilidade</label>
-              <select className="w-full border text-black border-gray-300 rounded-lg p-2 text-center">
-                <option value="public">Pública</option>
-                <option value="private">Privada</option>
-              </select>
-            </div> 
+            <Dropdown
+              label="Acessibilidade"
+              options={accessibilityOptions}
+              selected={selectedAccessibility}
+              onSelect={setSelectedAccessibility}
+            />
                
-            <div>
-              <label className="block text-sm text-black">Tipo de Partida</label>
-              <select className="w-full border text-black border-gray-300 rounded-lg p-2 text-center">
-                <option value="casual">1v1</option>
-                <option value="competitive">2v2</option>
-              </select>
-            </div>
+            <Dropdown
+              label="Tipo de Partida"
+              options={matchTypeOptions}
+              selected={selectedMatchType}
+              onSelect={setSelectedMatchType}
+            />
           </div>
 
           <div className="flex gap-2 mt-4">
@@ -142,6 +158,12 @@ function CreateMatchPopUp() {
 function FiltersPopUp() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const matchTypeOptions = [
+    { value: '1v1', label: '1v1' },
+    { value: '2v2', label: '2v2' },
+  ];
+  const [selectedMatchType, setSelectedMatchType] = useState(matchTypeOptions[0]);
+
   return (
     <>
       <ListFilter
@@ -164,15 +186,13 @@ function FiltersPopUp() {
               />
             </div>
                
-            <div>
-              <label className="block font-bold text-gray-700 mb-2">Tipo de Partida</label>
-              <select className="w-full border text-black border-gray-200 rounded-xl shadow-sm p-2 text-center">
-                <option value="casual">1v1</option>
-                <option value="competitive">2v2</option>
-              </select>
-            </div>
+            <Dropdown
+              label="Tipo de Partida"
+              options={matchTypeOptions}
+              selected={selectedMatchType}
+              onSelect={setSelectedMatchType}
+            />
           </div>
-
           <div className="flex gap-2 mt-4">
             <button
               type="button"
