@@ -4,12 +4,16 @@ import type { UserPublicProfile } from "@/types/accounts";
 import { findUsers } from "@/api/db/accountsApi";
 import useDebounce from "@/hooks/useDebounce";
 import useAuth from "@/hooks/useAuth";
+import { useSendFriendRequest } from "@/services/friendsService";
 
-function BodyEntry({
-  person,
-}: {
-  person: UserPublicProfile;
-}) {
+function BodyEntry({ person, onChange }: { person: UserPublicProfile; onChange: () => void }) {
+  const { mutate: sendFriendRequest } = useSendFriendRequest();
+  console.log("Rendering BodyEntry for person:", person);
+
+  const handleSendRequest = () => {
+    sendFriendRequest({ to_user: person.public_id });
+  };
+  
   return (
     <div className="flex flex-row border border-gray-500 rounded-full shadow-md p-2 gap-4 w-full hover:bg-gray-200 items-center hover:cursor-pointer">
       {person.image ? (
@@ -24,7 +28,13 @@ function BodyEntry({
         </div>
       )}
       <p className="text-2xl text-bold text-gray-700">{person.name}</p>
-      <Plus className="size-10 text-2xl text-green-500 ml-auto cursor-pointer transition-colors" />
+      <Plus className="size-10 text-2xl text-green-500 ml-auto cursor-pointer transition-colors"
+        onClick={
+          (e) => {
+            e.stopPropagation();
+            handleSendRequest();
+            onChange();
+        }}/>
     </div>
   );
 }
@@ -82,7 +92,7 @@ export function AddFriendPopUp() {
           {/* Content */}
             <div className="p-4 flex flex-col gap-4 max-h-96 overflow-y-auto">
               {data.map(user => (
-                <BodyEntry key={user.public_id} person={user} />
+                <BodyEntry key={user.public_id} person={user} onChange={() => setIsOpen(false)} />
               ))}
             </div>
           </div>
