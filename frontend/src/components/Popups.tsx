@@ -33,7 +33,7 @@ function PopUp({
       <div className="relative bg-white max-w-md rounded-4xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
         
         {/* Header with Background Accent */}
-        <div className="bg-linear-to-r from-primary-blue to-blue-700 px-6 py-6 text-white">
+        <div className="bg-primary-blue px-6 py-6 text-white">
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
