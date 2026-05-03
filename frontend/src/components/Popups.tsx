@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Plus, PlusCircle, Calendar, Clock, MapPin, UsersRound, X, DoorOpen, LogOut } from 'lucide-react';
 import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
-import Dropdown from '@/components/Dropdown';
+import { Dropdown } from '@/components/Dropdown';
 import { useCreateMatch, useJoinMatch, useLeaveMatch } from '@services/matchesService';
 import { useUserProfile } from '@/services/accountsService';
 
