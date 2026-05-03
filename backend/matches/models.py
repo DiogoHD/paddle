@@ -2,9 +2,12 @@ from datetime import timedelta
 
 from django.utils import timezone
 from django.db import models
-from accounts.models import User
 from core.models import BaseModel
 from django.core.exceptions import ValidationError
+
+class TeamChoices(models.TextChoices):
+    A = "A", "Team A"
+    B = "B", "Team B"
 
 class Match(BaseModel):
 
@@ -19,12 +22,13 @@ class Match(BaseModel):
         SINGLE = "SINGLE", "Single"
         TEAM = "TEAM", "Team"
 
-    created_by = models.ForeignKey(User, related_name="matches_created", on_delete=models.CASCADE)
+    created_by = models.ForeignKey('accounts.User', related_name="matches_created", on_delete=models.CASCADE)
     match_type = models.CharField(max_length=10, choices=MatchType.choices)
     field = models.SmallIntegerField(choices=Field.choices, blank=True, null=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
     is_private = models.BooleanField(default=False)
+    winner_team = models.CharField(max_length=1, choices=TeamChoices.choices, blank=True, null=True)
     
     class Meta:
         ordering = ["-created_at"]
@@ -56,16 +60,12 @@ class Match(BaseModel):
         return f"{self.match_type} match created by {self.created_by} on field {self.field}"
 
 class MatchPlayer(BaseModel):
-    class Team(models.TextChoices):
-        A = "A", "Team A"
-        B = "B", "Team B"
-
     match = models.ForeignKey(Match, related_name="players", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
 
     team = models.CharField(
         max_length=1,
-        choices=Team.choices,
+        choices=TeamChoices.choices,
         null=True,
         blank=True
     )

@@ -14,7 +14,7 @@ class MatchPlayerSerializer(serializers.ModelSerializer):
         read_only_fields = ['public_id', 'user']
 
 class MatchSerializer(serializers.ModelSerializer):
-    created_by_name = serializers.CharField(source='created_by.name', read_only=True)
+    created_by = PublicUserSerializer(read_only=True)
     players = MatchPlayerSerializer(many=True, read_only=True)
 
     class Meta:
@@ -22,12 +22,12 @@ class MatchSerializer(serializers.ModelSerializer):
         fields = [
             "public_id",
             "created_by",
-            "created_by_name",
             "match_type",
             "field",
             "start_time",
             "end_time",
             "is_private",
+            "winner_team",
             "players",
         ]
         read_only_fields = ["public_id", "field", "created_by", "end_time", "players"]

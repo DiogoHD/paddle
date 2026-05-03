@@ -1,4 +1,5 @@
 import uuid
+from django.apps import apps
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
@@ -41,3 +42,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.name}'
+    
+    @property
+    def total_wins(self):
+        Match = apps.get_model('matches', 'Match')
+        return Match.objects.filter(
+            players__user=self,
+            winner_team=models.F('players__team')
+        ).count()
+    
+    @property
+    def total_losses(self):
+        Match = apps.get_model('matches', 'Match')
+        return Match.objects.filter(
+            players__user=self,
+            winner_team__isnull=False
+        ).exclude(
+            winner_team=models.F('players__team')
+        ).exclude(
+            winner_team__isnull=True
+        ).count()

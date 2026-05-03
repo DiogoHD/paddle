@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
 
-from .models import Match, MatchPlayer
+from .models import Match, MatchPlayer, TeamChoices
 from .serializers import MatchSerializer, MatchCreateSerializer, MatchPlayerSerializer
 from friends.models import FriendshipRequest
 
@@ -94,3 +94,20 @@ def list_user_matches(request: Request) -> Response:
     matches = Match.objects.filter(players__user=request.user, end_time__gt=timezone.now()).order_by("start_time")
     serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def set_winner(request: Request, match_uuid: str) -> Response:
+    match = get_match_or_404(match_uuid)
+    if match.created_by != request.user:
+        raise PermissionDenied("Only the match creator can set the winner")
+    if match.end_time > timezone.now():
+        raise ValidationError("Cannot set winner for a match that hasn't ended yet")
+    
+    winner_team = request.data.get("winner_team")
+    if winner_team not in TeamChoices.values:
+        raise ValidationError("Invalid winner team")
+    
+    match.winner_team = winner_team
+    match.save()
+    return Response(MatchSerializer(match, context={"request": request}).data)
