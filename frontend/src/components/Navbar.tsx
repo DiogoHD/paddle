@@ -15,7 +15,7 @@ export function NavBar() {
       </main>
 
       {/* Criamos um container fixo no fundo, com altura total h-24 para esticar além da nav */}
-      <div className="fixed bottom-0 left-0 right-0 h-24 bg-white border-t border-gray-200 rounded-t-3xl shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-50">
+      <div className="fixed bottom-0 left-0 right-0 h-24 bg-primary-blue border-t border-gray-200 rounded-t-3xl shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-50">
         {/* A nav em si fica "dentro" do container arredondado, h-20 para os itens */}
         <nav className="flex h-24 items-center justify-around px-10">
           
@@ -50,17 +50,16 @@ function NavItem({ to, icon, active, label }: { to: string, icon: React.ReactNod
   return (
     <Link 
       to={to} 
-      className={`relative flex flex-col items-center justify-center gap-1 transition-all duration-200 w-20 h-16
-        ${active ? "text-primary-blue" : "text-gray-400 hover:text-gray-600"}`}
+      className={`relative flex flex-col items-center justify-center gap-1 transition-all duration-200 w-20 h-16 text-white`}
     >
-      <div className={`p-1.5 rounded-xl transition-colors ${active ? "bg-blue-50" : ""}`}>
+      <div className={`p-1.5 rounded-xl transition-colors ${active ? "bg-blue-50 text-primary-blue" : ""}`}>
         {icon}
       </div>
       <span className={`text-[10px] font-semibold uppercase tracking-wider ${active ? "opacity-100" : "opacity-70"}`}>
         {label}
       </span>
       {active && (
-        <span className="absolute -bottom-0.5 w-1/2 h-0.5 bg-primary-blue rounded-full"></span>
+        <span className="absolute -bottom-0.5 w-1/2 h-0.5 bg-white rounded-full"></span>
       )}
     </Link>
   );
