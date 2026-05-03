@@ -1,4 +1,4 @@
-import useAuth from "@hooks/useAuth";
+import { useAuth } from "@hooks/useAuth";
 import type { ReactElement } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 

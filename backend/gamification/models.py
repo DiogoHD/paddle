@@ -26,4 +26,4 @@ class UserAchievement(BaseModel):
         unique_together = ('user', 'achievement')
 
     def __str__(self):
-        return f"{self.user.username} - {self.achievement.name}"
+        return f"{self.user.name} - {self.achievement.name}"

@@ -1,11 +1,11 @@
 export function Header({ text, leftNode, rightNode }: { text: string; leftNode?: React.ReactNode; rightNode?: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-3 py-4 px-10 bg-linear-to-t from-primary-blue to-blue-700 text-white w-full items-center">
+    <div className="grid grid-cols-3 py-4 px-10 bg-primary-blue text-white w-full items-center rounded-b-3xl shadow-md">
       
       {/* Coluna da Esquerda */}
       <div className="flex justify-start">
         {leftNode && (
-          <div className="hover:text-gray-300 hover:cursor-pointer">
+          <div className="hover:text-gray-300 hover:cursor-pointer transition-colors">
             {leftNode}
           </div>
         )}
@@ -13,13 +13,15 @@ export function Header({ text, leftNode, rightNode }: { text: string; leftNode?:
 
       {/* Coluna do Meio */}
       <div className="flex justify-center">
-        <p className="text-2xl font-bold whitespace-nowrap">{text}</p>
+        <p className="text-2xl font-bold whitespace-nowrap tracking-tight">
+          {text}
+        </p>
       </div>
 
       {/* Coluna da Direita */}
       <div className="flex justify-end">
         {rightNode && (
-          <div className="hover:text-gray-300 hover:cursor-pointer">
+          <div className="hover:text-gray-300 hover:cursor-pointer transition-colors">
             {rightNode}
           </div>
         )}

@@ -60,7 +60,7 @@ export const joinMatch = async (token: string, matchId: string): Promise<MatchPl
 
 export const leaveMatch = async (token: string, matchId: string): Promise<void> => {
   const res = await apiRequest({
-    method: "POST",
+    method: "DELETE",
     path: `matches/${matchId}/leave/`,
     token
   });

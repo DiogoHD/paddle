@@ -4,9 +4,11 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
 
 from .models import Match, MatchPlayer
 from .serializers import MatchSerializer, MatchCreateSerializer, MatchPlayerSerializer
+from friends.models import FriendshipRequest
 
 def get_match_or_404(match_uuid: str) -> Match:
     try:
@@ -17,14 +19,14 @@ def get_match_or_404(match_uuid: str) -> Match:
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def list_matches(request: Request) -> Response:
-    matches = Match.objects.filter(end_time__gt=timezone.now())
+    matches = Match.objects.filter(end_time__gt=timezone.now()).order_by("start_time")
     serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def user_match_history(request: Request) -> Response:
-    matches = Match.objects.filter(end_time__lte=timezone.now(), players__user=request.user)
+    matches = Match.objects.filter(end_time__lte=timezone.now(), players__user=request.user).order_by("start_time")
     serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)
 
@@ -41,9 +43,15 @@ def create_match(request: Request) -> Response:
 def join_match(request: Request, match_uuid: str) -> Response:
     match = get_match_or_404(match_uuid)
     if match.is_private:
-        raise PermissionDenied("Cannot join a private match")
+        is_friend = FriendshipRequest.objects.filter(
+            (Q(from_user=request.user) & Q(to_user=match.created_by)) |
+            (Q(from_user=match.created_by) & Q(to_user=request.user)),
+            status=FriendshipRequest.Status.ACCEPTED
+        ).exists()
+        if not is_friend:
+            raise PermissionDenied("Não tem permissão para entrar nesta partida privada")
     if match.players.filter(user=request.user).exists():
-        return Response({"detail": "Already joined this match"}, status=400)
+        return Response({"detail": "Já está inscrito nesta partida"}, status=400)
 
     team = MatchPlayer.Team.A if match.players.filter(team=MatchPlayer.Team.A).count() < 2 else MatchPlayer.Team.B
     player = MatchPlayer(match=match, user=request.user, team=team)
@@ -60,7 +68,7 @@ def leave_match(request: Request, match_uuid: str) -> Response:
     match = get_match_or_404(match_uuid)
     player = MatchPlayer.objects.filter(match=match, user=request.user).first()
     if not player:
-        return Response({"detail": "Not part of this match"}, status=400)
+        return Response({"detail": "Não faz parte desta partida"}, status=400)
     player.delete()
     
     # If the match is now empty, delete it
@@ -83,6 +91,6 @@ def get_match_details(request: Request, match_uuid: str) -> Response:
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def list_user_matches(request: Request) -> Response:
-    matches = Match.objects.filter(players__user=request.user, end_time__gt=timezone.now())
+    matches = Match.objects.filter(players__user=request.user, end_time__gt=timezone.now()).order_by("start_time")
     serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)

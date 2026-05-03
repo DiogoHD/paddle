@@ -1,7 +1,7 @@
 import { PopUp } from '@components/Popups';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import useAuth from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 function DeletePopUp({
   description,

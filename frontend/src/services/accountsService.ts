@@ -1,4 +1,4 @@
-import useAuth from "@hooks/useAuth";
+import { useAuth } from "@hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { getUserProfile, getUserPublicProfile, updateUserProfile } from "@api/db/accountsApi";
