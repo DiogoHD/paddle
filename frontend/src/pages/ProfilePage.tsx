@@ -57,20 +57,20 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="h-full w-full gap-4 flex flex-col">
+    <div className="h-full w-full flex flex-col overflow-hidden">
       <Header text="Perfil" />
 
-      <img className="rounded-full border-2 border-primary-blue size-32 mx-auto" src={profileImage} alt="Profile Image" />
-      <p className="text-center text-2xl font-bold">{user?.name}</p>
+      <div className="flex flex-col gap-4 p-4 overflow-y-auto">
+        <img className="rounded-full border-2 border-primary-blue size-32 mx-auto" src={profileImage} alt="Profile Image" />
+        <p className="text-center text-2xl font-bold">{user?.name}</p>
 
-      <div className="flex flex-col gap-4 p-4">
-        <Link to="/personal-data"><BodyEntry icon={<FileUser className="size-10" />} label="Dados Pessoais" /></Link>
-        <Link to="/friends"><BodyEntry icon={<UsersRound className="size-10" />} label="Amigos" /></Link>
-        <Link to="/achievements"><BodyEntry icon={<Award className="size-10" />} label="Conquistas" /></Link>
-        <Link to="/match-history"><BodyEntry icon={<FileChartColumn className="size-10" />} label="Histórico de Partidas" /></Link>
-        <Link to="/settings"><BodyEntry icon={<Settings className="size-10" />} label="Configurações" /></Link>
+          <Link to="/personal-data"><BodyEntry icon={<FileUser className="size-10" />} label="Dados Pessoais" /></Link>
+          <Link to="/friends"><BodyEntry icon={<UsersRound className="size-10" />} label="Amigos" /></Link>
+          <Link to="/achievements"><BodyEntry icon={<Award className="size-10" />} label="Conquistas" /></Link>
+          <Link to="/match-history"><BodyEntry icon={<FileChartColumn className="size-10" />} label="Histórico de Partidas" /></Link>
+          <Link to="/settings"><BodyEntry icon={<Settings className="size-10" />} label="Configurações" /></Link>
 
-        <LogoutPopUp />
+          <LogoutPopUp />
       </div>
     </div>
   );

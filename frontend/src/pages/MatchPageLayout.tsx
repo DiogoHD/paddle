@@ -15,9 +15,11 @@ export default function MatchPageLayout({
   title,
   leftNode,
   rightNode,
+  emptyMessage,
   useFunction,
 }: {
   title: string;
+  emptyMessage?: string;
   leftNode?: React.ReactNode;
   rightNode?: React.ReactNode;
   useFunction: () => { data: Match[] | undefined ;
@@ -54,7 +56,7 @@ export default function MatchPageLayout({
   }, [filters.access, filters.matchType, matches]);
 
   return (
-    <div className="h-full w-full gap-4 flex flex-col overflow-hidden no-scrollbar">
+    <div className="h-full w-full flex flex-col overflow-hidden">
       <Header
         text={title}
         leftNode={leftNode}
@@ -64,7 +66,7 @@ export default function MatchPageLayout({
         {error && <ErrorState message="Erro ao carregar partidas" />}
         {filteredMatches && filteredMatches.length === 0 && (
           <div className="flex flex-1 items-center justify-center h-full">
-            <EmptyState message="Sem partidas disponíveis" />
+            <EmptyState message={emptyMessage || "Sem partidas disponíveis"} />
           </div>
         )}
         {filteredMatches?.map((match, index) => (

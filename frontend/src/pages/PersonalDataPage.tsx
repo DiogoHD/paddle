@@ -118,7 +118,7 @@ export default function PersonalDataPage() {
     : user?.image ? `http://localhost:8000${user.image}` : "/default-profile.png");
 
   return (
-    <div className="h-full min-h-screen w-full gap-4 flex flex-col bg-gray-50">
+    <div className="h-full w-full flex flex-col overflow-hidden">
       <Header 
         text="Dados Pessoais" 
         leftNode={
@@ -144,7 +144,7 @@ export default function PersonalDataPage() {
         }
       />
 
-      <div className="flex flex-col p-4 gap-6 h-full w-full max-w-2xl mx-auto">
+      <div className="flex flex-col gap-4 p-4 overflow-y-auto">
         {isLoading && <LoadingState message="A carregar os teus dados..." />}
         {(isError || updateProfile.isError) && (
           <ErrorState message="Ocorreu um erro ao processar os dados." />
