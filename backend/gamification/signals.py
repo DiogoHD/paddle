@@ -52,7 +52,7 @@ def check_wins_achievements(sender, instance, **kwargs):
         user = player.user
         
         potential_achievements = Achievement.objects.filter(
-            requirement_type=Achievement.RequirementType.WIN_COUNT,
+            requirement_type=Achievement.RequirementType.WON_COUNT,
             requirement_value__lte=user.total_wins()
         ).exclude(userachievement__user=user)
         
