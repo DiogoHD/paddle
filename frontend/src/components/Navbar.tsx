@@ -6,17 +6,19 @@ export function NavBar() {
   const isActive = (path: string) => pathname.startsWith(path);
 
   return (
-    // O container principal deve ter o fundo cinzento para que o contraste funcione
+    // h-screen e overflow-hidden no pai impedem que a página toda faça scroll
     <div className="flex flex-col h-screen overflow-hidden bg-gray-100">
       
-      {/* Área de Conteúdo: pb-24 para garantir que o conteúdo não fica escondido atrás da nav */}
-      <main className="flex-1 overflow-y-auto pb-24"> 
+      {/* 1. O HEADER (Se estiver aqui) entraria aqui sem fixed */}
+      {/* <Header text="Procurar Partida" /> */}
+
+      {/* 2. CONTEÚDO: flex-1 faz este gajo ocupar todo o espaço central */}
+      <main className="flex-1 overflow-y-auto"> 
         <Outlet />
       </main>
 
-      {/* Criamos um container fixo no fundo, com altura total h-24 para esticar além da nav */}
-      <div className="fixed bottom-0 left-0 right-0 h-24 bg-primary-blue border-t border-gray-200 rounded-t-3xl shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-50">
-        {/* A nav em si fica "dentro" do container arredondado, h-20 para os itens */}
+      {/* 3. NAVBAR: Sem fixed/absolute, ela fica "presa" no fundo pelo flexbox */}
+      <div className="bg-primary-blue border-t border-gray-200 rounded-t-3xl shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-50">
         <nav className="flex h-24 items-center justify-around px-10">
           
           <NavItem 
@@ -50,7 +52,7 @@ function NavItem({ to, icon, active, label }: { to: string, icon: React.ReactNod
   return (
     <Link 
       to={to} 
-      className={`relative flex flex-col items-center justify-center gap-1 transition-all duration-200 w-20 h-16 text-white`}
+      className="relative flex flex-col items-center justify-center gap-1 transition-all duration-200 w-20 h-16 text-white"
     >
       <div className={`p-1.5 rounded-xl transition-colors ${active ? "bg-blue-50 text-primary-blue" : ""}`}>
         {icon}
