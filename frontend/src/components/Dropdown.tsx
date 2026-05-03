@@ -64,52 +64,36 @@ function DropdownFilter({
   onChange,
 }: DropdownFilterProps) {
   const [open, setOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setOpen((prev) => !prev);
-  };
+  const [selected, setSelected] = useState(value || "");
 
   const handleSelect = (item: string) => {
     // If clicking the same item, clear it, otherwise set it
     const newValue = value === item ? "" : item;
     onChange(newValue);
     setOpen(false);
+    setSelected(newValue);
   };
-
-  const displayLabel = value ? `${title}: ${value}` : title;
 
   return (
     <div
-      className="rounded-2xl border border-surface300 bg-white text-sm cursor-pointer"
-      onClick={toggleDropdown}
+      className="relative w-full"
     >
-      <div className="px-4 py-2 flex justify-between items-center w-full hover:bg-surface100 hover:text-surface950 translate-y-[-0.093rem]">
-        <span className="truncate">{displayLabel}</span>
-        <ChevronDown
-          className={`transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          } size-4 text-surface700`}
-        />
-      </div>
+      <label className="block text-sm text-black">{title}</label>
+      <button
+        type="button"
+        className="w-full border text-black border-gray-300 rounded-lg p-2 text-center flex justify-between items-center"
+        onClick={() => setOpen(!open)}
+      >
+        <span>{selected || title}</span>
+        <ChevronDown size={16} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
       {open && (
-        <div className="w-full text-left bg-white transition-all duration-200 ease-in-out">
-          <div
-            className={"px-4 py-2 hover:bg-surface100 cursor-pointer"}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSelect("");
-            }}
-          >
-            Todos
-          </div>
+        <div className="absolute z-10 text-md text-black w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
           {content.map((item, index) => (
             <div
               key={index}
-              className={`px-4 py-2 hover:bg-surface100 cursor-pointer ${value === item ? "font-bold text-primary800 bg-surface50" : ""}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSelect(item);
-              }}
+              className="p-2 text-center hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleSelect(item)}
             >
               {item}
             </div>
