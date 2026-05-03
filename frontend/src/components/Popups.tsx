@@ -69,19 +69,16 @@ function CreateMatchPopUp() {
 
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const start_time = new Date(`${date}T${startTime}`).toISOString();
-    const end_time = endTime ? new Date(`${date}T${endTime}`).toISOString() : undefined;
 
     createMatch.mutate({
       match_type: selectedMatchType.value as 'SINGLE' | 'TEAM',
       is_private: selectedAccessibility.value === 'private',
       start_time,
-      ...(end_time && { end_time }),
     }, {
       onSuccess: () => setIsOpen(false),
     });
@@ -112,16 +109,6 @@ function CreateMatchPopUp() {
                 required
                 value={startTime}
                 onChange={e => setStartTime(e.target.value)}
-                className="w-full border text-black border-gray-300 rounded-lg p-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-black">Fim</label>
-              <input
-                type="time"
-                value={endTime}
-                onChange={e => setEndTime(e.target.value)}
                 className="w-full border text-black border-gray-300 rounded-lg p-2"
               />
             </div>
