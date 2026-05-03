@@ -19,7 +19,7 @@ export default function MatchHistoryPage() {
                 {error && <ErrorState message="Erro ao carregar histórico" />}
                 {matchHistory && matchHistory.length === 0 && (
                     <div className="flex flex-1 items-center justify-center h-full">
-                        <EmptyState message="Sem partidas disponíveis" />
+                        <EmptyState message="Sem partidas realizadas" />
                     </div>
                 )}
                 {matchHistory?.map((match, index) => (

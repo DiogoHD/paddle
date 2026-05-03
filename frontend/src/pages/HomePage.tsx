@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <MatchPageLayout
       title="As Minhas Partidas"
-      emptyMessage="Sem Partidas Agendadas."
+      emptyMessage="Sem Partidas Agendadas"
       useFunction={useUserMatches}
     />
   );

@@ -65,9 +65,7 @@ export default function MatchPageLayout({
         {isLoading && <LoadingState message="Carregando partidas..." />}
         {error && <ErrorState message="Erro ao carregar partidas" />}
         {filteredMatches && filteredMatches.length === 0 && (
-          <div className="flex flex-1 items-center justify-center h-full">
-            <EmptyState message={emptyMessage || "Sem partidas disponíveis"} />
-          </div>
+          <EmptyState message={emptyMessage || "Sem Partidas Disponíveis"} />
         )}
         {filteredMatches?.map((match, index) => (
           <MatchDetailsPopUp
