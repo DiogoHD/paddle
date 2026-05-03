@@ -8,6 +8,7 @@ done
 echo "PostgreSQL ready!"
 
 python manage.py migrate
+python manage.py seed_achievements
 python manage.py collectstatic --noinput
 
 exec "$@"
