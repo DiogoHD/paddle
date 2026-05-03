@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
+import { QueryClient } from '@tanstack/react-query'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -38,6 +39,7 @@ const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 // ---------------------------------------------------------------------------
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
+  const queryClient = new QueryClient()
 
   const [tokens, setTokens] = useState<AuthTokens | null>(() => {
     const stored = localStorage.getItem('tokens')
@@ -55,8 +57,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setTokens(null)
     setUser(null)
     localStorage.removeItem('tokens')
+    queryClient.clear()
     navigate('/login')
-  }, [navigate])
+  }, [navigate, queryClient])
 
   const login = async (email: string, password: string) => {
     const res = await fetch(`${BASE_URL}/api/auth/token/`, {
