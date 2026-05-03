@@ -6,6 +6,8 @@ class Achievement(BaseModel):
         FRIEND_COUNT = 'friend_count', 'Friend Count'
         ACCOUNT_AGE = 'account_age', 'Account Age'
         JOINED_MATCH = 'joined_match', 'Joined Match'
+        WON_COUNT = 'won_count', 'Won Matches Count'
+        LOSS_COUNT = 'loss_count', 'Lost Matches Count'
     
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)

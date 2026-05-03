@@ -46,3 +46,15 @@ export const useUpdateUserProfile = () => {
     }
   });
 };
+
+export const useGetLeaderboard = () => {
+  const { accessToken } = useAuth();
+
+  return useQuery({
+    queryKey: ["leaderboard"],
+    queryFn: () => getUserPublicProfile(accessToken!, "leaderboard"),
+    staleTime: StaleTime,
+    gcTime: GCTime,
+    enabled: !!accessToken,
+  });
+}

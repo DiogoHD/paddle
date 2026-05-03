@@ -43,7 +43,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f'{self.name}'
     
-    @property
     def total_wins(self):
         Match = apps.get_model('matches', 'Match')
         return Match.objects.filter(
@@ -51,7 +50,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             winner_team=models.F('players__team')
         ).count()
     
-    @property
     def total_losses(self):
         Match = apps.get_model('matches', 'Match')
         return Match.objects.filter(

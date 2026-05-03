@@ -7,6 +7,7 @@ export interface UserProfile {
   phone_number: string | null;
   image: string | null;
   created_at: string;
+  total_wins: number;
 }
 
 export interface UserProfileUpdate {
@@ -23,4 +24,5 @@ export interface UserPublicProfile {
   course: string | null;
   age: number | null;
   image: string | null;
+  total_wins: number;
 }

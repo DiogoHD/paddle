@@ -53,7 +53,7 @@ def join_match(request: Request, match_uuid: str) -> Response:
     if match.players.filter(user=request.user).exists():
         return Response({"detail": "Já está inscrito nesta partida"}, status=400)
 
-    team = MatchPlayer.Team.A if match.players.filter(team=MatchPlayer.Team.A).count() < 2 else MatchPlayer.Team.B
+    team = TeamChoices.A if match.players.filter(team=TeamChoices.A).count() < 2 else TeamChoices.B
     player = MatchPlayer(match=match, user=request.user, team=team)
     try:
         player.full_clean()

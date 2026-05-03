@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 from accounts.serializers import PublicUserSerializer
-from .models import Match, MatchPlayer
+from .models import Match, MatchPlayer, TeamChoices
 
 
 class MatchPlayerSerializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class MatchCreateSerializer(serializers.ModelSerializer):
         match.full_clean()
         match.save()
         
-        team = MatchPlayer.Team.A
+        team = TeamChoices.A
         player = MatchPlayer(match=match, user=user, team=team)
         player.full_clean()
         player.save()
