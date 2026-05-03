@@ -6,7 +6,9 @@ from datetime import date
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Leitura de perfil - Self"""
+    total_wins = serializers.ReadOnlyField()
+    total_losses = serializers.ReadOnlyField()
+    
     class Meta:
         model = User
         fields = [
@@ -18,6 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
             'phone_number',
             'image',
             'created_at',
+            'total_wins',
+            'total_losses',
         ]
 
 
@@ -25,6 +29,8 @@ class PublicUserSerializer(serializers.ModelSerializer):
     """Leitura de perfil de outro utilizador - info limitada"""
     age = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    total_wins = serializers.ReadOnlyField()
+    total_losses = serializers.ReadOnlyField()
     
     class Meta:
         model = User
@@ -34,6 +40,8 @@ class PublicUserSerializer(serializers.ModelSerializer):
             'course',
             'age',
             'image',
+            'total_wins',
+            'total_losses',
         ]
     
     def get_age(self, obj):

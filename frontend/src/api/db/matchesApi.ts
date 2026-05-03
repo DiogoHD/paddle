@@ -24,7 +24,7 @@ export const createMatch = async (token: string, data: CreateMatchPayload): Prom
   });
 
   if (!res.success || !res.data) {
-    throw new Error("Failed to create match");
+    throw res.error ?? new Error("Failed to create match");
   }
 
   return res.data;
@@ -96,4 +96,17 @@ export const getUserMatchHistory = async (token: string): Promise<Match[]> => {
   }
 
   return res.data;
+}
+
+export const setMatchWinner = async (token: string, matchId: string, winnerTeam: "A" | "B"): Promise<void> => {
+  const res = await apiRequest({
+    method: "POST",
+    path: `matches/${matchId}/set-winner/`,
+    token,
+    data: { winner_team: winnerTeam }
+  });
+
+  if (!res.success) {
+    throw new Error(res.error || "Failed to set match winner");
+  }
 }

@@ -8,4 +8,5 @@ urlpatterns = [
     path("me/delete/", views.delete_account, name="delete-account"),
     path("<uuid:public_id>/", views.public_profile, name="public-profile"),
     path("search/", views.filter_users, name="filter-users"),
+    path("leaderboard/", views.leaderboard, name="leaderboard"),
 ]

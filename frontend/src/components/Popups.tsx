@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Plus, PlusCircle, Calendar, Clock, MapPin, UsersRound, X, DoorOpen, LogOut } from 'lucide-react';
+import { Plus, PlusCircle, Calendar, Clock, MapPin, UsersRound, X, DoorOpen, LogOut, Trophy, CheckCircle2 } from 'lucide-react';
 import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
 import { Dropdown } from '@/components/Dropdown';
-import { useCreateMatch, useJoinMatch, useLeaveMatch } from '@services/matchesService';
+import { useCreateMatch, useJoinMatch, useLeaveMatch, useSetMatchWinner } from '@services/matchesService';
 import { useUserProfile } from '@/services/accountsService';
 
 interface PopUpProps {
@@ -245,10 +245,14 @@ function MatchDetailsPopUp({
 
   const [isOpen, setIsOpen] = useState(false);
   const [joinError, setJoinError] = useState<string|null>(null);
-  const { mutate: leaveMatch, isPending: isLeaving } = useLeaveMatch(match.public_id);
   
+  const { mutate: leaveMatch, isPending: isLeaving } = useLeaveMatch(match.public_id);
+  const { mutate: setWinner, isPending: isSettingWinner } = useSetMatchWinner(match.public_id);
   const { data: userProfile } = useUserProfile();
+
   const isInMatch = match.players.some(p => p.user.public_id === userProfile?.public_id);
+  const isFinished = new Date(match.end_time) < new Date();
+  const isCreator = userProfile?.public_id === match.created_by.public_id;
   
   const maxPerTeam = match.match_type === "SINGLE" ? 1 : 2;
   const midIndex = Math.ceil(match.players.length / 2);
@@ -261,6 +265,13 @@ function MatchDetailsPopUp({
   const dateString = date.charAt(0).toUpperCase() + date.slice(1);
   const startHour = new Date(match.start_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
   const endHour = new Date(match.end_time).toLocaleTimeString('pt', { hour: '2-digit', minute: '2-digit' });
+
+  const handleVote = (team: "A" | "B") => {
+    setWinner(team, {
+      onSuccess: () => setJoinError(null),
+      onError: (err: any) => setJoinError(err.message)
+    });
+  };
 
   return (
     <>
@@ -294,6 +305,19 @@ function MatchDetailsPopUp({
             </div>
           </div>
 
+          {/* Match Winner (If Set) */}
+          {match.winner_team && (
+            <div className="bg-yellow-100 border-2 border-yellow-400 p-4 rounded-2xl flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+              <div className="flex items-center gap-2 text-yellow-600 mb-1">
+                <Trophy size={20} />
+                <span className="text-xs font-black uppercase tracking-widest">Vencedores</span>
+              </div>
+              <p className="text-xl font-bold text-gray-800 text-center">
+                {match.winner_team === "A" ? "Equipa A" : "Equipa B"}
+              </p>
+            </div>
+          )}
+
           {/* Players Section */}
           <div className="flex items-center gap-2 mb-4">
             <UsersRound size={20} className="text-gray-400" />
@@ -310,7 +334,42 @@ function MatchDetailsPopUp({
             <p className="text-red-500 text-sm text-center mt-4">{joinError}</p>
           )}
 
-          {isInMatch && (
+          {/* Lógica de Finalização e Votação */}
+          {isFinished && !match.winner_team && (
+            <div className="space-y-4 pt-4 border-t border-gray-100">
+              <div className="flex flex-col items-center gap-1">
+                <CheckCircle2 className="text-green-500" size={24} />
+                <p className="text-green-600 font-bold uppercase text-xs">Partida Finalizada</p>
+              </div>
+
+              {/* Apenas o criador vê os botões de definir vencedor */}
+              {isCreator ? (
+                <div className="bg-blue-50 p-4 rounded-2xl space-y-3">
+                  <p className="text-sm font-bold text-primary-blue text-center">Quem ganhou o encontro?</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => handleVote("A")}
+                      disabled={isSettingWinner}
+                      className="bg-white border-2 border-primary-blue text-primary-blue py-2 rounded-xl font-bold hover:bg-primary-blue hover:text-white transition-all text-sm disabled:opacity-50"
+                    >
+                      Equipa A
+                    </button>
+                    <button
+                      onClick={() => handleVote("B")}
+                      disabled={isSettingWinner}
+                      className="bg-white border-2 border-primary-blue text-primary-blue py-2 rounded-xl font-bold hover:bg-primary-blue hover:text-white transition-all text-sm disabled:opacity-50"
+                    >
+                      Equipa B
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-gray-400 text-xs text-center italic">A aguardar que o criador registe o resultado...</p>
+              )}
+            </div>
+          )}
+
+          {isInMatch && !isFinished && (
             <button 
               onClick={() => leaveMatch()}
               disabled={isLeaving}
@@ -320,7 +379,6 @@ function MatchDetailsPopUp({
               {isLeaving ? "A sair..." : "Sair da Partida"}
             </button>
           )}
-
         </div>
       </PopUp>
     </>

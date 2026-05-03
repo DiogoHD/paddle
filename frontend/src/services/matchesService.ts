@@ -1,7 +1,7 @@
 import { useAuth } from "@hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { getMatches, getUserMatches, getUserMatchHistory, createMatch, joinMatch, leaveMatch } from "@api/db/matchesApi";
+import { getMatches, getUserMatches, getUserMatchHistory, createMatch, joinMatch, leaveMatch, setMatchWinner } from "@api/db/matchesApi";
 import type { CreateMatchPayload, Match } from "@appTypes/matches";
 
 const StaleTime = 1000 * 60 * 5; // 5 minutes
@@ -78,6 +78,21 @@ export const useLeaveMatch = (matchId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["matches"] });
       queryClient.invalidateQueries({ queryKey: ["userMatches"] });
+    }
+  });
+}
+
+export const useSetMatchWinner = (matchId: string) => {
+  const { accessToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (winnerTeam: "A" | "B") => setMatchWinner(accessToken!, matchId, winnerTeam),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userMatchHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["userPublicProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["match", matchId] });
     }
   });
 }

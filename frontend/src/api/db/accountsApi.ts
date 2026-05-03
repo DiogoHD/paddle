@@ -59,3 +59,17 @@ export const getUserPublicProfile = async (token: string, userId: string) => {
 
   return res.data;
 }
+
+export const getLeaderboard = async (token: string) => {
+  const res = await apiRequest({
+    method: "GET",
+    path: "accounts/leaderboard/",
+    token
+  });
+
+  if (!res.success || !res.data) {
+    throw new Error("Failed to fetch leaderboard");
+  }
+
+  return res.data;
+}

@@ -1,7 +1,7 @@
 import { 
-  Settings,
   ArrowRight,
   Award,
+  Crown,
   UsersRound,
   FileChartColumn,
   FileUser,
@@ -68,7 +68,7 @@ export default function ProfilePage() {
           <Link to="/friends"><BodyEntry icon={<UsersRound className="size-10" />} label="Amigos" /></Link>
           <Link to="/achievements"><BodyEntry icon={<Award className="size-10" />} label="Conquistas" /></Link>
           <Link to="/match-history"><BodyEntry icon={<FileChartColumn className="size-10" />} label="Histórico de Partidas" /></Link>
-          <Link to="/settings"><BodyEntry icon={<Settings className="size-10" />} label="Configurações" /></Link>
+          <Link to="/leaderboard"><BodyEntry icon={<Crown className="size-10" />} label="Leaderboard" /></Link>
 
           <LogoutPopUp />
       </div>
