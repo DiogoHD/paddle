@@ -8,6 +8,7 @@ from django.db.models import Q
 
 from .models import Match, MatchPlayer
 from .serializers import MatchSerializer, MatchCreateSerializer, MatchPlayerSerializer
+from friends.models import FriendshipRequest
 
 def get_match_or_404(match_uuid: str) -> Match:
     try:
@@ -41,12 +42,11 @@ def create_match(request: Request) -> Response:
 @permission_classes([IsAuthenticated])
 def join_match(request: Request, match_uuid: str) -> Response:
     match = get_match_or_404(match_uuid)
-    from friends.models import Friendship
     if match.is_private:
-        is_friend = Friendship.objects.filter(
+        is_friend = FriendshipRequest.objects.filter(
             (Q(from_user=request.user) & Q(to_user=match.created_by)) |
             (Q(from_user=match.created_by) & Q(to_user=request.user)),
-            status=Friendship.Status.ACCEPTED
+            status=FriendshipRequest.Status.ACCEPTED
         ).exists()
         if not is_friend:
             raise PermissionDenied("Não tem permissão para entrar nesta partida privada")
