@@ -9,7 +9,7 @@ export default function MatchHistoryPage() {
   const { data: matchHistory, isLoading, error } = useUserMatchHistory();
 
     return (
-        <div className="h-full w-full gap-4 flex flex-col overflow-hidden no-scrollbar">
+        <div className="h-full w-full flex flex-col overflow-hidden">
             <Header 
                 text="Histórico de Partidas" 
                 leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>} 

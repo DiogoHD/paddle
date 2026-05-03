@@ -27,7 +27,7 @@ export default function FriendsPage() {
   const pendingSent = friends?.filter(f => f.status === "pending" && f.to_user === f.user_public_id) ?? [];
 
   return (
-    <div className="h-full w-full gap-4 flex flex-col overflow-hidden">
+    <div className="h-full w-full flex flex-col overflow-hidden">
       <Header 
         text="Amigos" 
         leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>}

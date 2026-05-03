@@ -30,7 +30,7 @@ function PopUp({
       />
       
       {/* Modal content */}
-      <div className="relative bg-white max-w-md rounded-4xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+      <div className="relative bg-white max-w-md max-h-[70vh] rounded-4xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200 overflow-y-auto">
         
         {/* Header with Background Accent */}
         <div className="bg-primary-blue px-6 py-6 text-white">
@@ -279,8 +279,7 @@ function MatchDetailsPopUp({
 
       <PopUp isOpen={isOpen} onClose={() => setIsOpen(false)} title="Detalhes da Partida">
         {/* Content */}
-        <div className="p-6 space-y-6">
-          
+        <div className="p-4 flex-1 overflow-y-auto flex flex-col gap-4">          
           {/* Main Info Grid */}
           <div className="grid grid-cols-2 gap-4">
             {/* Court */}

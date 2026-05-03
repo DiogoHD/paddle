@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function SettingsPage() {
 
     return (
-        <div className="h-full w-full gap-4 flex flex-col">
+        <div className="h-full w-full flex flex-col overflow-hidden">            
             <Header 
                 text="Configurações" 
                 leftNode={<Link to="/profile"><ArrowLeft className="size-8 text-white" /></Link>} 
