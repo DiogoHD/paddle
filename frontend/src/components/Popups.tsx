@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Plus, PlusCircle, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
+import { Plus, PlusCircle, Calendar, Clock, MapPin, UsersRound, X, DoorOpen, LogOut } from 'lucide-react';
 import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
 import Dropdown from '@/components/Dropdown';
-import { useCreateMatch } from '@services/matchesService';
-import { useJoinMatch } from '@services/matchesService';
+import { useCreateMatch, useJoinMatch, useLeaveMatch } from '@services/matchesService';
+import useAuth from '@/hooks/useAuth';
+import { useUserProfile } from '@/services/accountsService';
 
 interface PopUpProps {
   isOpen: boolean;
@@ -245,7 +246,12 @@ function MatchDetailsPopUp({
 
   const [isOpen, setIsOpen] = useState(false);
   const [joinError, setJoinError] = useState<string|null>(null);
-
+  const { user } = useAuth();
+  const { mutate: leaveMatch, isPending: isLeaving } = useLeaveMatch(match.public_id);
+  
+  const { data: userProfile } = useUserProfile();
+  const isInMatch = match.players.some(p => p.user.public_id === userProfile?.public_id);
+  
   const maxPerTeam = match.match_type === "SINGLE" ? 1 : 2;
   const midIndex = Math.ceil(match.players.length / 2);
   const team1Raw = match.players.slice(0, midIndex);
@@ -260,17 +266,9 @@ function MatchDetailsPopUp({
 
   return (
     <>
-      <MatchCard
-        match={match}
-        dateString={dateString}
-        onClick={() => setIsOpen(true)}
-      />
+      <MatchCard match={match} dateString={dateString} onClick={() => setIsOpen(true)} />
 
-      <PopUp 
-        isOpen={isOpen} 
-        onClose={() => setIsOpen(false)} 
-        title="Detalhes da Partida"
-      >
+      <PopUp isOpen={isOpen} onClose={() => setIsOpen(false)} title="Detalhes da Partida">
         {/* Content */}
         <div className="p-6 space-y-6">
           
@@ -315,13 +313,17 @@ function MatchDetailsPopUp({
             <p className="text-red-500 text-sm text-center mt-4">{joinError}</p>
           )}
 
-          {/* Action Button */}
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 w-full hover:cursor-pointer"
-          >
-            Fechar Detalhes
-          </button>
+          {isInMatch && (
+            <button 
+              onClick={() => leaveMatch()}
+              disabled={isLeaving}
+              className="w-full bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 hover:cursor-pointer"
+            >
+              <LogOut className="size-5 inline-block mr-2" />
+              {isLeaving ? "A sair..." : "Sair da Partida"}
+            </button>
+          )}
+
         </div>
       </PopUp>
     </>
