@@ -6,6 +6,7 @@ import {
   type UseFormRegister,
   useForm,
 } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const defaultValues = {
   email: "",
@@ -35,7 +36,7 @@ function loginInput({
   onFieldChange?: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col w-full">
       <label
         htmlFor={id}
         className="font-bold text-sm text-black mb-1"
@@ -100,7 +101,6 @@ export default function LoginPage() {
         <h1 className="font-bold text-3xl text-center text-black mb-8">
           Iniciar Sessão
         </h1>
-
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col space-y-4"
@@ -151,12 +151,12 @@ export default function LoginPage() {
         <div className="mt-8 text-center text-sm">
           <p className="text-gray-600">
             Ainda não tem conta? {" "}
-            <a href="/signup" className="text-primary-blue font-bold cursor-pointer hover:underline">
+            <Link to="/signup" className="text-primary-blue font-bold cursor-pointer hover:underline">
               Cadastre-se aqui
-            </a>
+            </Link>
           </p>
-          
         </div>
+
       </div>
     </div>
   </div>

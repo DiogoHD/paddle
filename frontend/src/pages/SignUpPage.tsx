@@ -6,6 +6,7 @@ import {
   type UseFormRegister,
   useForm,
 } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const defaultValues = {
   email: "",
@@ -36,7 +37,7 @@ function registerInput({
   onFieldChange?: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col w-full">
       <label
         htmlFor={id}
         className="font-bold text-sm text-black mb-1"
@@ -102,9 +103,14 @@ export default function SignUpPage() {
     
     <div className="flex-1 bg-white -mt-10 rounded-t-[45px] px-8 pt-8 shadow-2xl overflow-y-auto">
       <div className="w-full max-w-sm mx-auto flex flex-col pb-8">
-        <h1 className="font-bold text-3xl text-center text-black mb-8">
+        <h1 className="font-bold text-3xl text-center text-black mb-4">
           Criar Conta
         </h1>
+
+        <div className="flex flex-col gap-2 bg-yellow-200 p-4 rounded-lg text-yellow-800 text-center mb-6 border border-yellow-500 leading-none">
+          <span className="font-bold">IMPORTANTE!</span>
+          <p>Deve-se cadastrar com o email institucional da UC</p>
+        </div>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -158,6 +164,9 @@ export default function SignUpPage() {
           >
             Criar Conta
           </button>
+          <Link to="/login" className="text-sm text-primary-blue mt-2 hover:underline text-center font-bold">
+            Já tenho uma conta
+          </Link>
         </form>
       </div>
     </div>
