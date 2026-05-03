@@ -20,7 +20,7 @@ export function NavBar() {
             to="/matches" 
             icon={<Search size={26} strokeWidth={isActive("/matches") ? 2.5 : 2} />} 
             active={isActive("/matches")} 
-            label="Partidas"
+            label="Procurar"
           />
           
           <NavItem 
@@ -52,7 +52,7 @@ function NavItem({ to, icon, active, label }: { to: string, icon: React.ReactNod
       <div className={`p-1.5 rounded-xl transition-colors ${active ? "bg-blue-50 text-primary-blue" : ""}`}>
         {icon}
       </div>
-      <span className={`text-[10px] font-semibold uppercase tracking-wider ${active ? "opacity-100" : "opacity-70"}`}>
+      <span className={"text-sm font-bold uppercase tracking-wider"}>
         {label}
       </span>
       {active && (

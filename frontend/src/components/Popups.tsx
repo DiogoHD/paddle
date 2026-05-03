@@ -186,12 +186,13 @@ function JoinSlot({ matchId, access, onError }: { matchId: string, access: "publ
         }
       })}
       disabled={isPending}
-      className='flex flex-row justify-between items-center gap-3 hover:cursor-pointer disabled:opacity-50'
+      className='flex-1 flex flex-row justify-between items-center gap-3 hover:cursor-pointer disabled:opacity-50'
     >
-      <PlusCircle className="text-primary-blue" size={32} />
-      <p className="text-md font-medium text-gray-700">
+      <PlusCircle className="text-primary-blue" size={48} />
+      <p className="text-lg font-medium text-gray-700 leading-none">
         {isPending ? "A entrar..." : access === "public" ? "Entrar" : "Pedir para entrar"}
       </p>
+      <div></div>
     </button>
   );
 }
@@ -212,8 +213,8 @@ function ListPlayers({
       {team.map((player, index) => (
         <div key={index} className="flex items-center gap-3 p-2 bg-white border border-gray-200 rounded-xl shadow-sm">
           {player ? (
-            <div className='flex flex-row justify-between items-center gap-3'>
-              <div className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
+            <div className='flex flex-row w-full justify-between items-center gap-3'>
+              <div className="size-12 rounded-full bg-primary-blue flex items-center justify-center text-white text-lg font-bold">
                 {player.user.image ? (
                   <img 
                     src={player.user.image}
@@ -224,9 +225,10 @@ function ListPlayers({
                   player.user.name.charAt(0).toUpperCase()
                 )}
               </div>
-              <span className="text-md font-medium text-gray-700">
+              <span className="text-lg font-medium text-gray-700 leading-none">
                 {player.user.name}
               </span>
+              <div></div>
             </div>
           ) : (
             <JoinSlot matchId={matchId} access={access} onError={onError} />
@@ -319,14 +321,14 @@ function MatchDetailsPopUp({
           )}
 
           {/* Players Section */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2">
             <UsersRound size={20} className="text-gray-400" />
             <h3 className="font-bold text-gray-700">Jogadores</h3>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-2">
+          <div className="flex flex-col justify-center gap-2">
             <ListPlayers matchId={match.public_id} team={team1} access={match.is_private ? "private" : "public"} onError={setJoinError} />
-            <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
+            <hr className="w-full h-1 bg-primary-blue border-0 rounded-sm" />
             <ListPlayers matchId={match.public_id} team={team2} access={match.is_private ? "private" : "public"} onError={setJoinError} />
           </div>
 
