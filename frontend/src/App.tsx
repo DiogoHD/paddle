@@ -9,7 +9,7 @@ import RequireAuth from "@auth/guards/RequireAuth";
 import AchievementsPage from "@/pages/AchievementsPage";
 import FriendsPage from "@/pages/FriendsPage";
 import PersonalDataPage from "@/pages/PersonalDataPage";
-import SettingsPage from "@/pages/SettingsPage";
+import LeaderboardPage from "@/pages/LeaderboardPage";
 import MatchHistoryPage from "@/pages/MatchHistoryPage";
 
 const App = () => {
@@ -63,8 +63,8 @@ const App = () => {
         />
 
         <Route
-          path="/settings"
-          element={<SettingsPage />}
+          path="/leaderboard"
+          element={<LeaderboardPage />}
         />
 
       </Route>
