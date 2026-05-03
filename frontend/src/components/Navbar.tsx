@@ -20,7 +20,7 @@ export function NavBar() {
             to="/matches" 
             icon={<Search size={26} strokeWidth={isActive("/matches") ? 2.5 : 2} />} 
             active={isActive("/matches")} 
-            label="Partidas"
+            label="Procurar"
           />
           
           <NavItem 

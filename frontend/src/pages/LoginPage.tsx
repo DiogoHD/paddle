@@ -90,14 +90,9 @@ export default function LoginPage() {
  return (
   <div className="min-h-screen w-full bg-white flex flex-col">
 
-    <div className="bg-primary-blue h-[40vh] flex flex-col items-center justify-center pb-12">
-
-      <div className="size-32 rounded-full border-2 border-dashed border-white/80 flex items-center justify-center p-1 mb-4">
-        <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
-           <img src={app_logo} alt="Logo" className="w-32 h-32 object-contain"/>
-        </div>
-      </div>
-      <p className="text-2xl text-white font-medium">Padel UC</p>
+    <div className="bg-primary-blue h-[40vh] flex flex-col items-center justify-center pb-12 gap-[1vh]">
+        <img src={app_logo} alt="Logo" className="h-1/2 object-contain"/>
+        <p className="text-[4vh] text-white font-medium">Padel UC</p>
     </div>
 
     <div className="flex-1 bg-white -mt-10 rounded-t-[45px] px-8 pt-8 shadow-2xl">
