@@ -1,12 +1,12 @@
 from django.db.models.signals import post_save
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
-from django.db.models import Q
+from django.db.models import Q, F
 from django.utils.timezone import now
 
 from .models import UserAchievement, Achievement
 from friends.models import FriendshipRequest
-from matches.models import MatchPlayer
+from matches.models import MatchPlayer, Match
 
 @receiver(post_save, sender=FriendshipRequest)
 def check_friendship_achievements(sender, instance, **kwargs):
@@ -41,20 +41,39 @@ def check_account_age_achievements(sender, request, user, **kwargs):
     for achievement in potential_achievements:
         UserAchievement.objects.get_or_create(user=user, achievement=achievement)
 
-@receiver(post_save, sender=MatchPlayer)
-def check_joined_match_achievements(sender, instance, created, **kwargs):
-    if not created:
-        return  # Only check when a new MatchPlayer is created (i.e., user joins a match)
-    user = instance.user
+@receiver(post_save, sender=Match)
+def check_wins_achievements(sender, instance, **kwargs):
+    if not instance.winner_team:
+        return
     
-    # Count matches joined by the user
-    joined_match_count = MatchPlayer.objects.filter(user=user).count()
+    winning_players = MatchPlayer.objects.filter(match=instance, team=instance.winner_team).select_related('user')
+    
+    for player in winning_players:
+        user = player.user
+        
+        potential_achievements = Achievement.objects.filter(
+            requirement_type=Achievement.RequirementType.WIN_COUNT,
+            requirement_value__lte=user.total_wins
+        ).exclude(userachievement__user=user)
+        
+        for achievement in potential_achievements:
+            UserAchievement.objects.get_or_create(user=user, achievement=achievement)
 
-    potential_achievements = Achievement.objects.filter(
-        requirement_type=Achievement.RequirementType.JOINED_MATCH,
-        requirement_value__lte=joined_match_count
-    ).exclude(
-        userachievement__user=user  # Exclude already unlocked achievements
-    )
-    for achievement in potential_achievements:
-        UserAchievement.objects.get_or_create(user=user, achievement=achievement)
+
+@receiver(post_save, sender=Match)
+def check_losses_achievements(sender, instance, **kwargs):
+    if not instance.winner_team:
+        return
+    
+    losing_players = MatchPlayer.objects.filter(match=instance).exclude(team=instance.winner_team).select_related('user')
+    
+    for player in losing_players:
+        user = player.user
+        
+        potential_achievements = Achievement.objects.filter(
+            requirement_type=Achievement.RequirementType.LOSS_COUNT,
+            requirement_value__lte=user.total_losses
+        ).exclude(userachievement__user=user)
+        
+        for achievement in potential_achievements:
+            UserAchievement.objects.get_or_create(user=user, achievement=achievement)

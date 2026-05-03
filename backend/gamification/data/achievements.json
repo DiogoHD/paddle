@@ -55,5 +55,37 @@
         "requirement_type": "joined_match",
         "requirement_value": 100,
         "img_src": "/achievements/padel-master.png"
+    },
+    {
+        "name": "Vencedor de Padel",
+        "slug": "padel-winner",
+        "description": "Ganha a tua primeira partida",
+        "requirement_type": "won_count",
+        "requirement_value": 1,
+        "img_src": "/achievements/padel-winner.png"
+    },
+    {
+        "name": "Campeão de Padel",
+        "slug": "padel-champion",
+        "description": "Ganha 10 partidas",
+        "requirement_type": "won_count",
+        "requirement_value": 10,
+        "img_src": "/achievements/padel-champion.png"
+    },
+    {
+        "name": "Lenda do Padel",
+        "slug": "padel-legend",
+        "description": "Ganha 50 partidas",
+        "requirement_type": "won_count",
+        "requirement_value": 50,
+        "img_src": "/achievements/padel-legend.png"
+    },
+    {
+        "name": "Tenta Outra Vez!",
+        "slug": "try-again",
+        "description": "Perde a tua primeira partida",
+        "requirement_type": "loss_count",
+        "requirement_value": 1,
+        "img_src": "/achievements/try-again.png"
     }
 ]
