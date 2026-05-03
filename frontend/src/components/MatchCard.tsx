@@ -34,7 +34,7 @@ function MatchCard({
       <div className="flex flex-row justify-center items-center gap-4">
         {team1.map((person, index) => (
           person ? (
-            <div key={person.user.public_id} className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
+            <div key={person.user.public_id} className="size-10 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
               {person.user.image ? (
                 <img 
                   src={person.user.image}
@@ -52,7 +52,7 @@ function MatchCard({
         <p className="font-bold text-lg mx-2 text-primary-blue">VS</p>
         {team2.map((person, index) => (
           person ? (
-            <div key={person.user.public_id} className="size-8 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
+            <div key={person.user.public_id} className="size-10 rounded-full bg-primary-blue flex items-center justify-center text-white text-xs font-bold">
               {person.user.image ? (
                 <img 
                   src={person.user.image}
