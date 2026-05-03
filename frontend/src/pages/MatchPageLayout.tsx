@@ -60,7 +60,11 @@ export default function MatchPageLayout({
       <Header
         text={title}
         leftNode={leftNode}
-        rightNode={ rightNode || <FiltersPopUp control={control} reset={reset} /> } />
+        rightNode={ rightNode || <FiltersPopUp control={control} reset={reset} /> } 
+      />
+      <p className="text-center mt-3">
+        {filteredMatches && filteredMatches.length > 0 && `A mostrar ${filteredMatches.length} de ${matches?.length || 0} partidas`}
+      </p>
       <div className="flex flex-col items-start gap-4 p-4 h-full w-full overflow-y-auto">
         {isLoading && <LoadingState message="Carregando partidas..." />}
         {error && <ErrorState message="Erro ao carregar partidas" />}
