@@ -1,8 +1,12 @@
 import { House, Search, CircleUserRoundIcon } from "lucide-react";
-import { Outlet } from "react-router";
-import { Link } from "react-router-dom";
+import { Outlet, Link, useLocation} from "react-router-dom";
 
 export function NavBar() {
+  const { pathname } = useLocation();
+
+  const iconClass = (path: string) =>
+    pathname.startsWith(path) ? "text-gray-400" : "text-white hover:text-gray-300";
+
   return (
     // h-screen prende o layout à altura exata do ecrã
     <div className="flex flex-col h-screen overflow-hidden">
@@ -14,13 +18,13 @@ export function NavBar() {
 
       {/* NavBar: Fica sempre no fundo, sem flutuar por cima do conteúdo */}
       <nav className="flex py-4 px-10 justify-between bg-primary-blue text-white w-full border-t bg-linear-to-b from-primary-blue to-blue-700">
-        <Link to="/matches" className="hover:text-gray-300">
+        <Link to="/matches" className={iconClass("/matches")}>
           <Search className="size-10" />
         </Link>
-        <Link to="/home" className="hover:text-gray-300">
+        <Link to="/home" className={iconClass("/home")}>
           <House className="size-10" />
         </Link>
-        <Link to="/profile" className="hover:text-gray-300">
+        <Link to="/profile" className={iconClass("/profile")}>
           <CircleUserRoundIcon className="size-10" />
         </Link>
       </nav>
