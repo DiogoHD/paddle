@@ -11,6 +11,7 @@ import { Header } from "@components/Header";
 
 import { LogoutPopUp } from "@components/AlertPopUps";
 import { useUserProfile } from "@services/accountsService";
+import { LoadingState, ErrorState } from "@components/States";
 
 function BodyEntry({
   icon,
@@ -35,7 +36,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <div className="h-full w-full flex items-center justify-center">
-        <p className="text-xl font-bold text-gray-500">A carregar perfil...</p>
+        <LoadingState message="A carregar perfil..." />
       </div>
     );
   }
@@ -50,7 +51,7 @@ export default function ProfilePage() {
   if (error || !user) {
     return (
       <div className="h-full w-full flex items-center justify-center">
-        <p className="text-xl font-bold text-red-500">Erro ao carregar o utilizador.</p>
+        <ErrorState message="Erro ao carregar o utilizador." />
       </div>
     );
   }

@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
 
 from .models import Match, MatchPlayer
 from .serializers import MatchSerializer, MatchCreateSerializer, MatchPlayerSerializer
@@ -40,10 +41,17 @@ def create_match(request: Request) -> Response:
 @permission_classes([IsAuthenticated])
 def join_match(request: Request, match_uuid: str) -> Response:
     match = get_match_or_404(match_uuid)
+    from friends.models import Friendship
     if match.is_private:
-        raise PermissionDenied("Cannot join a private match")
+        is_friend = Friendship.objects.filter(
+            (Q(from_user=request.user) & Q(to_user=match.created_by)) |
+            (Q(from_user=match.created_by) & Q(to_user=request.user)),
+            status=Friendship.Status.ACCEPTED
+        ).exists()
+        if not is_friend:
+            raise PermissionDenied("Não tem permissão para entrar nesta partida privada")
     if match.players.filter(user=request.user).exists():
-        return Response({"detail": "Already joined this match"}, status=400)
+        return Response({"detail": "Já está inscrito nesta partida"}, status=400)
 
     team = MatchPlayer.Team.A if match.players.filter(team=MatchPlayer.Team.A).count() < 2 else MatchPlayer.Team.B
     player = MatchPlayer(match=match, user=request.user, team=team)
@@ -60,7 +68,7 @@ def leave_match(request: Request, match_uuid: str) -> Response:
     match = get_match_or_404(match_uuid)
     player = MatchPlayer.objects.filter(match=match, user=request.user).first()
     if not player:
-        return Response({"detail": "Not part of this match"}, status=400)
+        return Response({"detail": "Não faz parte desta partida"}, status=400)
     player.delete()
     
     # If the match is now empty, delete it

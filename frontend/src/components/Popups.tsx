@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
+import { Plus, PlusCircle, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
 import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
 import Dropdown from '@/components/Dropdown';
@@ -187,12 +187,17 @@ function PopUpEntry1({
   );
 }
 
-function JoinSlot({ matchId, access }: { matchId: string, access: "public" | "private" }) {
+function JoinSlot({ matchId, access, onError }: { matchId: string, access: "public" | "private", onError: (msg: string) => void }) {
   const { mutate: joinMatch, isPending } = useJoinMatch(matchId);
 
   return (
     <button 
-      onClick={() => joinMatch()}
+      onClick={() => joinMatch(undefined, {
+        onError: (error: any) => {
+          const msg = error?.response?.data?.detail || "Não foi possível entrar na partida."
+          onError(msg)
+        }
+      })}
       disabled={isPending}
       className='flex flex-row justify-between items-center gap-3 hover:cursor-pointer disabled:opacity-50'
     >
@@ -207,11 +212,13 @@ function JoinSlot({ matchId, access }: { matchId: string, access: "public" | "pr
 function ListPlayers({
   matchId,
   access,
-  team
+  team,
+  onError
 }: {
   matchId: string,
   team: (MatchPlayer|null)[],
   access: "public" | "private"
+  onError: (msg: string) => void
 }) {
   return (
     <div className={`grid ${team.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-4`}>
@@ -235,7 +242,7 @@ function ListPlayers({
               </span>
             </div>
           ) : (
-            <JoinSlot matchId={matchId} access={access} />
+            <JoinSlot matchId={matchId} access={access} onError={onError} />
           )}
         </div>
       ))}
@@ -250,6 +257,7 @@ function MatchDetailsPopUp({
 }) {
 
   const [isOpen, setIsOpen] = useState(false);
+  const [joinError, setJoinError] = useState<string|null>(null);
 
   const maxPerTeam = match.match_type === "SINGLE" ? 1 : 2;
   const midIndex = Math.ceil(match.players.length / 2);
@@ -311,12 +319,14 @@ function MatchDetailsPopUp({
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
-            <ListPlayers matchId={match.public_id} team={team1} access={match.is_private ? "private" : "public"} />
-            
+            <ListPlayers matchId={match.public_id} team={team1} access={match.is_private ? "private" : "public"} onError={setJoinError} />
             <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
-            
-            <ListPlayers matchId={match.public_id} team={team2} access={match.is_private ? "private" : "public"} />
+            <ListPlayers matchId={match.public_id} team={team2} access={match.is_private ? "private" : "public"} onError={setJoinError} />
           </div>
+
+          {joinError && (
+            <p className="text-red-500 text-sm text-center mt-4">{joinError}</p>
+          )}
 
           {/* Action Button */}
           <button 

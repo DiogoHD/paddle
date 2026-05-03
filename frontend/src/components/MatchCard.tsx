@@ -1,6 +1,5 @@
 import { PlusCircle, Globe, Lock } from "lucide-react"
 import type { Match } from "@/types/matches";
-import { Controller, useForm } from "react-hook-form";
 
 export type usr = {
   name: string,
