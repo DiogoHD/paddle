@@ -66,14 +66,14 @@ export default function FilterPopUp({
                 reset();
                 setIsOpen(false);
               }}
-              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-lg font-bold hover:bg-gray-400"
+              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-4xl font-bold hover:bg-gray-400"
             >
               Cancelar
             </button>
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700"
+              className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-4xl font-bold hover:bg-blue-700"
             >
               Aplicar
             </button>

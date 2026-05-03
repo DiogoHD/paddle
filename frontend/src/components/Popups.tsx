@@ -98,7 +98,7 @@ function CreateMatchPopUp() {
                 required
                 value={date}
                 onChange={e => setDate(e.target.value)}
-                className="w-full border text-black border-gray-300 rounded-lg p-2"
+                className="w-full border text-black border-gray-300 rounded-4xl p-2"
               />
             </div>
 
@@ -109,7 +109,7 @@ function CreateMatchPopUp() {
                 required
                 value={startTime}
                 onChange={e => setStartTime(e.target.value)}
-                className="w-full border text-black border-gray-300 rounded-lg p-2"
+                className="w-full border text-black border-gray-300 rounded-4xl p-2"
               />
             </div>
 
@@ -136,14 +136,14 @@ function CreateMatchPopUp() {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-lg font-bold hover:bg-gray-400"
+              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-4xl font-bold hover:bg-gray-400"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={createMatch.isPending}
-              className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50"
+              className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-4xl font-bold hover:bg-blue-700 disabled:opacity-50"
             >
               {createMatch.isPending ? 'A criar...' : 'Criar'}
             </button>
