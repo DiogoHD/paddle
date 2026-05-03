@@ -24,7 +24,7 @@ export const createMatch = async (token: string, data: CreateMatchPayload): Prom
   });
 
   if (!res.success || !res.data) {
-    throw new Error("Failed to create match");
+    throw res.error ?? new Error("Failed to create match");
   }
 
   return res.data;

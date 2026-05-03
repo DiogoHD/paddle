@@ -53,6 +53,8 @@ class Match(BaseModel):
             available_fields = set(c[0] for c in self.Field.choices) - set(occupied_fields)
             if available_fields:
                 self.field = min(available_fields)
+            else:
+                raise ValidationError("No available fields for the selected time slot")
         
         super().save(*args, **kwargs)
     
