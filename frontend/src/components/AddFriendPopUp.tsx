@@ -100,7 +100,7 @@ export function AddFriendPopUp() {
                   value={searchText}
                   onChange={e => setSearchText(e.target.value)}
                   placeholder="Nome do jogador..." 
-                  className="w-full bg-white text-black pl-12 pr-4 py-3 border-2 border-gray-100 rounded-2xl focus:border-primary-blue focus:outline-none transition-all shadow-sm"
+                  className="w-full bg-white text-black pl-12 pr-4 py-3 border-2 border-gray-100 rounded-4xl focus:border-primary-blue focus:outline-none transition-all shadow-sm"
                 />
               </div>
             </div>

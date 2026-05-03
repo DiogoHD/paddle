@@ -21,7 +21,7 @@ function BodyEntry({
   label: string;
 }) {
   return (
-    <div className="flex flex-row border border-primary-blue rounded-lg shadow-md p-2 gap-4 w-full hover:bg-gray-200 items-center hover:cursor-pointer">
+    <div className="flex flex-row w-full justify-between items-center gap-4 bg-white rounded-4xl border border-primary-blue shadow-md p-2">
       {icon}
       <p className="text-2xl text-bold">{label}</p>
       <ArrowRight className="size-8 text-primary-blue ml-auto cursor-pointer transition-colors" />
@@ -60,17 +60,19 @@ export default function ProfilePage() {
     <div className="h-full w-full flex flex-col overflow-hidden">
       <Header text="Perfil" />
 
-      <div className="flex flex-col gap-4 p-4 overflow-y-auto">
+      <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full w-full">
         <img className="rounded-full border-2 border-primary-blue size-32 mx-auto" src={profileImage} alt="Profile Image" />
         <p className="text-center text-2xl font-bold">{user?.name}</p>
 
-          <Link to="/personal-data"><BodyEntry icon={<FileUser className="size-10" />} label="Dados Pessoais" /></Link>
-          <Link to="/friends"><BodyEntry icon={<UsersRound className="size-10" />} label="Amigos" /></Link>
-          <Link to="/achievements"><BodyEntry icon={<Award className="size-10" />} label="Conquistas" /></Link>
-          <Link to="/match-history"><BodyEntry icon={<FileChartColumn className="size-10" />} label="Histórico de Partidas" /></Link>
-          <Link to="/leaderboard"><BodyEntry icon={<Crown className="size-10" />} label="Leaderboard" /></Link>
+          <Link to="/personal-data"><BodyEntry icon={<FileUser className="size-8 text-primary-blue" />} label="Dados Pessoais" /></Link>
+          <Link to="/friends"><BodyEntry icon={<UsersRound className="size-8 text-primary-blue" />} label="Amigos" /></Link>
+          <Link to="/achievements"><BodyEntry icon={<Award className="size-8 text-primary-blue" />} label="Conquistas" /></Link>
+          <Link to="/match-history"><BodyEntry icon={<FileChartColumn className="size-10 text-primary-blue" />} label="Histórico" /></Link>
+          <Link to="/leaderboard"><BodyEntry icon={<Crown className="size-8 text-primary-blue" />} label="Leaderboard" /></Link>
 
+        <div className="mt-auto flex items-center justify-center">
           <LogoutPopUp />
+        </div>
       </div>
     </div>
   );

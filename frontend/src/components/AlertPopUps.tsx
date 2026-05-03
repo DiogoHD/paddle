@@ -3,6 +3,8 @@ import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from "@/hooks/useAuth";
 
+import { LogOut } from 'lucide-react';
+
 function DeletePopUp({
   description,
   onRemove
@@ -34,14 +36,14 @@ function DeletePopUp({
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-lg font-bold hover:bg-gray-400"
+              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-4xl font-bold hover:bg-gray-400"
             >
               Cancelar
             </button>
             <button
               type="submit"
               onClick={onRemove}
-              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-600"
+              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-4xl font-bold hover:bg-red-600"
             >
               Eliminar
             </button>
@@ -71,9 +73,10 @@ function LogoutPopUp() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="mt-32 flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-600 hover:cursor-pointer transition-colors"
+        className="flex justify-between gap-2 items-center bg-red-500 text-white px-4 py-2 rounded-4xl hover:bg-red-600 hover:cursor-pointer transition-colors"
       >
-        Terminar Sessão
+        <p className="text-lg text-bold">Terminar Sessão</p>
+        <LogOut className="size-6 ml-2" />
       </button>
 
       <PopUp 
@@ -89,14 +92,14 @@ function LogoutPopUp() {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-lg font-bold hover:bg-gray-400"
+              className="flex-1 bg-gray-300 text-black px-4 py-2 rounded-4xl font-bold hover:bg-gray-400"
             >
               Cancelar
             </button>
             <button
               type="submit"
               onClick={handleLogout}
-              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-600"
+              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-4xl font-bold hover:bg-red-600"
             >
               Terminar
             </button>
