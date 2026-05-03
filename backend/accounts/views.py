@@ -4,6 +4,7 @@ from rest_framework.request import Request
 from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.db.models import Count, Q, F
 
 from .models import User
 from .serializers import UserSerializer, PublicUserSerializer, RegisterSerializer, UpdateUserSerializer
@@ -66,5 +67,21 @@ def filter_users(request: Request):
         users = User.objects.filter(name__icontains=name)
     else:
         users = User.objects.all()
+    serializer = PublicUserSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def leaderboard(request: Request):
+    """Obter a lista de jogadores para o leaderboard"""
+    users = User.objects.annotate(
+        total_wins=Count(
+            'matchplayer',
+            filter=Q(
+                matchplayer__match__winner_team__isnull=False,
+                matchplayer__team=F('matchplayer__match__winner_team')
+            )
+        )
+    ).order_by('-total_wins')[:10]
     serializer = PublicUserSerializer(users, many=True)
     return Response(serializer.data)

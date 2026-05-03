@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
-from django.db.models import Q, F
+from django.db.models import Q
 from django.utils.timezone import now
 
 from .models import UserAchievement, Achievement
@@ -53,7 +53,7 @@ def check_wins_achievements(sender, instance, **kwargs):
         
         potential_achievements = Achievement.objects.filter(
             requirement_type=Achievement.RequirementType.WIN_COUNT,
-            requirement_value__lte=user.total_wins
+            requirement_value__lte=user.total_wins()
         ).exclude(userachievement__user=user)
         
         for achievement in potential_achievements:
@@ -72,7 +72,7 @@ def check_losses_achievements(sender, instance, **kwargs):
         
         potential_achievements = Achievement.objects.filter(
             requirement_type=Achievement.RequirementType.LOSS_COUNT,
-            requirement_value__lte=user.total_losses
+            requirement_value__lte=user.total_losses()
         ).exclude(userachievement__user=user)
         
         for achievement in potential_achievements:
