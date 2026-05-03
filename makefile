@@ -1,6 +1,6 @@
 COMPOSE=docker compose
 
-.PHONY: help up down rebuild makemigrations migrate logs
+.PHONY: help up down rebuild makemigrations migrate logs django-shell
 
 help:
 	@echo "Available commands:"
@@ -10,6 +10,8 @@ help:
 	@echo "  makemigrations  Create new migrations based on the changes detected to your models"
 	@echo "  migrate         Apply database migrations"
 	@echo "  logs            View logs"
+	@echo "  django-shell    Open a django shell in the backend container"
+	@echo "  help            Show this help message"
 
 up:
 	$(COMPOSE) up -d
@@ -28,3 +30,6 @@ migrate:
 
 logs:
 	$(COMPOSE) logs
+
+django-shell:
+	$(COMPOSE) exec backend python manage.py shell

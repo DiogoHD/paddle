@@ -10,16 +10,13 @@ export interface MatchPlayer {
 
 export interface Match {
   public_id: string;
-  created_by: string;
-  created_by_name: string;
+  created_by: UserPublicProfile;
   match_type: "SINGLE" | "TEAM";
   field: string;
-
   start_time: string;
   end_time: string;
-
   is_private: boolean;
-
+  winner_team: "A" | "B" | null;
   players: MatchPlayer[];
 }
 
