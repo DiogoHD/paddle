@@ -1,9 +1,9 @@
-import { Plus } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { UserPublicProfile } from "@/types/accounts";
 import { findUsers } from "@/api/db/accountsApi";
-import useDebounce from "@/hooks/useDebounce";
-import useAuth from "@/hooks/useAuth";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useAuth } from "@/hooks/useAuth";
 import { useSendFriendRequest } from "@/services/friendsService";
 
 function BodyEntry({ person, onChange }: { person: UserPublicProfile; onChange: () => void }) {
@@ -15,7 +15,7 @@ function BodyEntry({ person, onChange }: { person: UserPublicProfile; onChange: 
   };
   
   return (
-    <div className="flex flex-row border border-gray-500 rounded-full shadow-md p-2 gap-4 w-full hover:bg-gray-200 items-center hover:cursor-pointer">
+    <div className="flex flex-row border border-primary-blue rounded-full shadow-md p-2 gap-4 w-full hover:bg-gray-200 items-center hover:cursor-pointer">
       {person.image ? (
         <img 
           src={person.image}
@@ -39,17 +39,14 @@ function BodyEntry({ person, onChange }: { person: UserPublicProfile; onChange: 
   );
 }
 
-
 export function AddFriendPopUp() {
   const [isOpen, setIsOpen] = useState(false);
   const { accessToken } = useAuth();
-
   const [data, setData] = useState<UserPublicProfile[]>([]);
   const [searchText, setSearchText] = useState("");
-
   const debounce = useDebounce(searchText, 500);
 
-  useEffect(()=> {
+  useEffect(() => {
     const fetchUsers = async () => {
       if (debounce) {
         const users = await findUsers(accessToken!, debounce);
@@ -63,41 +60,73 @@ export function AddFriendPopUp() {
   
   return (
     <>
-      <Plus
-        className='size-8'
-        onClick={() => setIsOpen(true)}
-      />
+      <Plus className='size-8 cursor-pointer' onClick={() => setIsOpen(true)} />
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-auto">
-          {/* Blurred background */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pb-20">
+          {/* Fundo com Blur */}
           <div 
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
         
-          {/* Modal content */}
-          <div className="relative min-h-80 bg-white max-w-md rounded-4xl overflow-hidden shadow-2xl w-full">
+          {/* 
+              MODAL CONTENT 
+              - max-h-[85vh]: Limita a altura a 85% do ecrã.
+              - flex flex-col: Essencial para o scroll interno funcionar.
+          */}
+          <div className="relative bg-white w-full max-w-md max-h-[70vh] flex flex-col rounded-4xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
             
-            {/* Search Bar */}
-            <div className="p-4 border-b">
-              <input 
-                type="search"
-                value={searchText}
-                onChange={e=> setSearchText(e.target.value)}
-                placeholder="Pesquisar amigos..." 
-                className="w-full text-black px-4 py-2 border rounded-full"
-              />
+            {/* Header: shrink-0 impede que ele seja "esmagado" */}
+            <div className="bg-primary-blue px-6 py-6 text-white shrink-0">
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
+              >
+                <X size={20} />
+              </button>
+              <h2 className="text-2xl font-bold">Adicionar Amigo</h2>
             </div>
-          {/* Content */}
-            <div className="p-4 flex flex-col gap-4 max-h-96 overflow-y-auto">
-              {data.map(user => (
-                <BodyEntry key={user.public_id} person={user} onChange={() => setIsOpen(false)} />
-              ))}
+
+            {/* Search Bar: shrink-0 também aqui para ficar sempre visível */}
+            <div className="p-4 bg-gray-50/50 shrink-0 border-b border-gray-100">
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-primary-blue transition-colors">
+                  <Search size={20} />
+                </div>
+                <input 
+                  type="search"
+                  autoFocus
+                  value={searchText}
+                  onChange={e => setSearchText(e.target.value)}
+                  placeholder="Nome do jogador..." 
+                  className="w-full bg-white text-black pl-12 pr-4 py-3 border-2 border-gray-100 rounded-2xl focus:border-primary-blue focus:outline-none transition-all shadow-sm"
+                />
+              </div>
             </div>
+
+            {/* 
+                LISTA DE RESULTADOS
+                - flex-1: Ocupa o resto do espaço disponível.
+                - overflow-y-auto: Ativa o scroll apenas aqui dentro.
+            */}
+            <div className="p-4 flex-1 overflow-y-auto flex flex-col gap-4">
+              {data.length > 0 ? (
+                data.map(user => (
+                  <BodyEntry key={user.public_id} person={user} onChange={() => setIsOpen(false)} />
+                ))
+              ) : (
+                searchText && (
+                  <p className="text-center text-gray-400 py-10 font-medium italic">
+                    Nenhum jogador encontrado.
+                  </p>
+                )
+              )}
+            </div>
+            
           </div>
-         </div>
-       )}
+        </div>
+      )}
     </>
   );
 }

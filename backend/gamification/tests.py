@@ -16,13 +16,11 @@ class AchievementSignalTest(TestCase):
             name="diogo", 
             email="diogo@student.uc.pt",  # <--- Domínio correto
             password="123",
-            student_number="12345678"
         )
         self.user2 = User.objects.create_user(
             name="nuno", 
             email="nuno@student.uc.pt",   # <--- Domínio correto
             password="123",
-            student_number="87654321"
         )
 
         self.ach = Achievement.objects.create(

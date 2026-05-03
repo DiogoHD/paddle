@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Plus, PlusCircle, ListFilter, Calendar, Clock, MapPin, UsersRound, X, DoorOpen } from 'lucide-react';
+import { Plus, PlusCircle, Calendar, Clock, MapPin, UsersRound, X, DoorOpen, LogOut } from 'lucide-react';
 import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
 import Dropdown from '@/components/Dropdown';
-import { useCreateMatch } from '@services/matchesService';
-import { useJoinMatch } from '@services/matchesService';
+import { useCreateMatch, useJoinMatch, useLeaveMatch } from '@services/matchesService';
+import { useUserProfile } from '@/services/accountsService';
 
 interface PopUpProps {
   isOpen: boolean;
@@ -33,7 +33,7 @@ function PopUp({
       <div className="relative bg-white max-w-md rounded-4xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
         
         {/* Header with Background Accent */}
-        <div className="bg-linear-to-r from-primary-blue to-blue-700 px-6 py-6 text-white">
+        <div className="bg-primary-blue px-6 py-6 text-white">
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
@@ -69,19 +69,16 @@ function CreateMatchPopUp() {
 
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const start_time = new Date(`${date}T${startTime}`).toISOString();
-    const end_time = endTime ? new Date(`${date}T${endTime}`).toISOString() : undefined;
 
     createMatch.mutate({
       match_type: selectedMatchType.value as 'SINGLE' | 'TEAM',
       is_private: selectedAccessibility.value === 'private',
       start_time,
-      ...(end_time && { end_time }),
     }, {
       onSuccess: () => setIsOpen(false),
     });
@@ -112,16 +109,6 @@ function CreateMatchPopUp() {
                 required
                 value={startTime}
                 onChange={e => setStartTime(e.target.value)}
-                className="w-full border text-black border-gray-300 rounded-lg p-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-black">Fim</label>
-              <input
-                type="time"
-                value={endTime}
-                onChange={e => setEndTime(e.target.value)}
                 className="w-full border text-black border-gray-300 rounded-lg p-2"
               />
             </div>
@@ -187,12 +174,17 @@ function PopUpEntry1({
   );
 }
 
-function JoinSlot({ matchId, access }: { matchId: string, access: "public" | "private" }) {
+function JoinSlot({ matchId, access, onError }: { matchId: string, access: "public" | "private", onError: (msg: string) => void }) {
   const { mutate: joinMatch, isPending } = useJoinMatch(matchId);
 
   return (
     <button 
-      onClick={() => joinMatch()}
+      onClick={() => joinMatch(undefined, {
+        onError: (error: any) => {
+          const msg = error?.response?.data?.detail || "Não foi possível entrar na partida."
+          onError(msg)
+        }
+      })}
       disabled={isPending}
       className='flex flex-row justify-between items-center gap-3 hover:cursor-pointer disabled:opacity-50'
     >
@@ -207,11 +199,13 @@ function JoinSlot({ matchId, access }: { matchId: string, access: "public" | "pr
 function ListPlayers({
   matchId,
   access,
-  team
+  team,
+  onError
 }: {
   matchId: string,
   team: (MatchPlayer|null)[],
   access: "public" | "private"
+  onError: (msg: string) => void
 }) {
   return (
     <div className={`grid ${team.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-4`}>
@@ -235,7 +229,7 @@ function ListPlayers({
               </span>
             </div>
           ) : (
-            <JoinSlot matchId={matchId} access={access} />
+            <JoinSlot matchId={matchId} access={access} onError={onError} />
           )}
         </div>
       ))}
@@ -250,7 +244,12 @@ function MatchDetailsPopUp({
 }) {
 
   const [isOpen, setIsOpen] = useState(false);
-
+  const [joinError, setJoinError] = useState<string|null>(null);
+  const { mutate: leaveMatch, isPending: isLeaving } = useLeaveMatch(match.public_id);
+  
+  const { data: userProfile } = useUserProfile();
+  const isInMatch = match.players.some(p => p.user.public_id === userProfile?.public_id);
+  
   const maxPerTeam = match.match_type === "SINGLE" ? 1 : 2;
   const midIndex = Math.ceil(match.players.length / 2);
   const team1Raw = match.players.slice(0, midIndex);
@@ -265,17 +264,9 @@ function MatchDetailsPopUp({
 
   return (
     <>
-      <MatchCard
-        match={match}
-        dateString={dateString}
-        onClick={() => setIsOpen(true)}
-      />
+      <MatchCard match={match} dateString={dateString} onClick={() => setIsOpen(true)} />
 
-      <PopUp 
-        isOpen={isOpen} 
-        onClose={() => setIsOpen(false)} 
-        title="Detalhes da Partida"
-      >
+      <PopUp isOpen={isOpen} onClose={() => setIsOpen(false)} title="Detalhes da Partida">
         {/* Content */}
         <div className="p-6 space-y-6">
           
@@ -311,20 +302,26 @@ function MatchDetailsPopUp({
           </div>
 
           <div className="flex flex-col items-center justify-center gap-2">
-            <ListPlayers matchId={match.public_id} team={team1} access={match.is_private ? "private" : "public"} />
-            
+            <ListPlayers matchId={match.public_id} team={team1} access={match.is_private ? "private" : "public"} onError={setJoinError} />
             <hr className="w-64 h-1 bg-primary-blue border-0 rounded-sm" />
-            
-            <ListPlayers matchId={match.public_id} team={team2} access={match.is_private ? "private" : "public"} />
+            <ListPlayers matchId={match.public_id} team={team2} access={match.is_private ? "private" : "public"} onError={setJoinError} />
           </div>
 
-          {/* Action Button */}
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="flex-1 bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 w-full hover:cursor-pointer"
-          >
-            Fechar Detalhes
-          </button>
+          {joinError && (
+            <p className="text-red-500 text-sm text-center mt-4">{joinError}</p>
+          )}
+
+          {isInMatch && (
+            <button 
+              onClick={() => leaveMatch()}
+              disabled={isLeaving}
+              className="w-full bg-primary-blue text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700 hover:cursor-pointer"
+            >
+              <LogOut className="size-5 inline-block mr-2" />
+              {isLeaving ? "A sair..." : "Sair da Partida"}
+            </button>
+          )}
+
         </div>
       </PopUp>
     </>
