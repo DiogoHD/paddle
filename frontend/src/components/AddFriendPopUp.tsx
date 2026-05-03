@@ -2,8 +2,8 @@ import { Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { UserPublicProfile } from "@/types/accounts";
 import { findUsers } from "@/api/db/accountsApi";
-import useDebounce from "@/hooks/useDebounce";
-import useAuth from "@/hooks/useAuth";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useAuth } from "@/hooks/useAuth";
 import { useSendFriendRequest } from "@/services/friendsService";
 
 function BodyEntry({ person, onChange }: { person: UserPublicProfile; onChange: () => void }) {

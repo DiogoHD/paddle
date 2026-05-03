@@ -1,4 +1,4 @@
-import useAuth from "@hooks/useAuth";
+import { useAuth } from "@hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { getMatches, getUserMatches, getUserMatchHistory, createMatch, joinMatch, leaveMatch } from "@api/db/matchesApi";

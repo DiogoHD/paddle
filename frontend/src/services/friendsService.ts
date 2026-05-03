@@ -1,4 +1,4 @@
-import useAuth from "@hooks/useAuth";
+import { useAuth } from "@hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getFriends, removeFriendship, respondFriendshipRequest, sendFriendRequest } from "@api/db/friendsApi";

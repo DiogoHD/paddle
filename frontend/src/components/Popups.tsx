@@ -4,7 +4,6 @@ import { MatchCard } from '@/components/MatchCard';
 import type { Match, MatchPlayer } from '@/types/matches';
 import Dropdown from '@/components/Dropdown';
 import { useCreateMatch, useJoinMatch, useLeaveMatch } from '@services/matchesService';
-import useAuth from '@/hooks/useAuth';
 import { useUserProfile } from '@/services/accountsService';
 
 interface PopUpProps {
@@ -246,7 +245,6 @@ function MatchDetailsPopUp({
 
   const [isOpen, setIsOpen] = useState(false);
   const [joinError, setJoinError] = useState<string|null>(null);
-  const { user } = useAuth();
   const { mutate: leaveMatch, isPending: isLeaving } = useLeaveMatch(match.public_id);
   
   const { data: userProfile } = useUserProfile();

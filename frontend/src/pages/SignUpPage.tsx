@@ -1,4 +1,4 @@
-import useAuth from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import app_logo from "@/assets/app-logo.png";
 import {
   type FieldErrors,
