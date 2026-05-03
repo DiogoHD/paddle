@@ -19,14 +19,14 @@ def get_match_or_404(match_uuid: str) -> Match:
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def list_matches(request: Request) -> Response:
-    matches = Match.objects.filter(end_time__gt=timezone.now())
+    matches = Match.objects.filter(end_time__gt=timezone.now()).order_by("start_time")
     serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def user_match_history(request: Request) -> Response:
-    matches = Match.objects.filter(end_time__lte=timezone.now(), players__user=request.user)
+    matches = Match.objects.filter(end_time__lte=timezone.now(), players__user=request.user).order_by("start_time")
     serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)
 
@@ -91,6 +91,6 @@ def get_match_details(request: Request, match_uuid: str) -> Response:
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def list_user_matches(request: Request) -> Response:
-    matches = Match.objects.filter(players__user=request.user, end_time__gt=timezone.now())
+    matches = Match.objects.filter(players__user=request.user, end_time__gt=timezone.now()).order_by("start_time")
     serializer = MatchSerializer(matches, many=True, context={"request": request})
     return Response(serializer.data)

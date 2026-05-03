@@ -51,6 +51,7 @@ export const useCreateMatch = () => {
     mutationFn: (matchData: CreateMatchPayload) => createMatch(accessToken!, matchData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["matches"] });
+      queryClient.invalidateQueries({ queryKey: ["userMatches"] });
     }
   });
 }
