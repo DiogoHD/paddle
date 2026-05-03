@@ -1,6 +1,5 @@
 export interface UserProfile {
   public_id: string;
-  student_number: number;
   name: string;
   email: string;
   birthday: string | null;

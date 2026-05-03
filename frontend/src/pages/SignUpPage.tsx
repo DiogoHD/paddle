@@ -10,7 +10,6 @@ import {
 const defaultValues = {
   email: "",
   name: "",
-  number: "",
   password: "",
   confirmPassword: "",
 };
@@ -83,7 +82,7 @@ export default function SignUpPage() {
       return;
     }
     try {
-      await signup(data.email, data.password, data.number, data.name);
+      await signup(data.email, data.password, data.name);
       reset();
     } catch (error: any) {
       setError("root", {
@@ -120,15 +119,6 @@ export default function SignUpPage() {
             id: "email",
             label: "Email",
             type: "email",
-            errors,
-            register,
-            onFieldChange: () => clearErrors("root"),
-          })}
-
-          {registerInput({
-            id: "number",
-            label: "Número",
-            type: "number",
             errors,
             register,
             onFieldChange: () => clearErrors("root"),

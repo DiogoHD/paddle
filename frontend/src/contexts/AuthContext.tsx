@@ -23,7 +23,7 @@ interface AuthContextType {
   accessToken: string | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
-  signup: (email: string, password: string, number: string, name: string) => Promise<void>
+  signup: (email: string, password: string, name: string) => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -77,11 +77,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     navigate('/')
   }
 
-  const signup = async (email: string, password: string, student_number: string, name: string) => {
+  const signup = async (email: string, password: string, name: string) => {
     const res = await fetch(`${BASE_URL}/api/accounts/register/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, student_number, name }),
+      body: JSON.stringify({ email, password, name }),
     })
 
     if (!res.ok) {
